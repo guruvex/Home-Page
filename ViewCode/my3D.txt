@@ -1,0 +1,93 @@
+'----------------------------------------------------
+'| 3d maze built in qb4.5			    |
+'| very basic gfx				    |
+'| built to play with 3d, but found my system was   |
+'| to slow to make use of it			    |
+'|						    |
+'| build finshed 1998				    |
+'| by james heath				    |
+'----------------------------------------------------
+
+   SCREEN 13
+   DIM MAP(10, 10)
+   DIM TABEL(449) AS LONG
+
+'- load map and find the player start
+   FOR ZZ% = 0 TO 10
+	FOR ZX% = 0 TO 10
+		READ MAP%(ZZ%, ZX%)
+		IF MAP%(ZZ%, ZX%) = 9 THEN LET UD& = ZZ%: LET LR& = ZX%: LET MAP%(ZZ%, ZX%) = 0
+	NEXT ZX%
+   NEXT ZZ%
+
+   FOR ZZ% = 0 TO 449
+	LET TABEL(ZZ%) = (COS(ZZ% * (22 / 7) / 180) * 1024) / 10
+   NEXT ZZ%
+
+   LET UD& = UD& * 1024
+   LET LR& = LR& * 1024
+
+'- draw 3d world on screen
+100
+   LET ML% = 0
+   FOR ZZ% = AN% - 32 TO AN% + 32 STEP 1
+	LET DEN% = 0
+	ANGEL% = ZZ%
+	IF ANGEL% < 0 THEN LET ANGEL% = ANGEL% + 360
+	IF ANGEL% > 359 THEN LET ANGEL% = ANGEL% - 360
+	STEPX& = TABEL(ANGEL% + 90)
+	STEPY& = TABEL(ANGEL%)
+
+	LET XX& = LR&
+	LET YY& = UD&
+	DO
+		XX& = XX& - STEPX&
+		YY& = YY& - STEPY&
+		LET DEN% = DEN% + 1
+
+		LET M% = MAP%(XX& \ 1024, YY& \ 1024)
+	LOOP UNTIL M%
+
+	DT% = 1000 \ DEN%
+	LINE (ML%, 0)-(ML% + 5, 100 - DT% - 1), 4, BF
+	LINE (ML%, 199)-(ML% + 5, 100 + DT% + 1), 5, BF
+
+
+	LINE (ML%, 100 - DT%)-(ML% + 5, 100 + DT%), M%, BF
+	ML% = ML% + 6
+   NEXT ZZ%
+
+'- wait for movment key -
+   DO
+	LET A$ = INKEY$
+   LOOP UNTIL A$ <> ""
+   LET OUD& = UD&: LET OLR& = LR&
+
+   IF A$ = CHR$(27) THEN END
+
+   IF A$ = CHR$(0) + "H" THEN LET UD& = UD& - TABEL(AN%) * 3: LET LR& = LR& - TABEL(AN% + 90) * 3
+   IF A$ = CHR$(0) + "P" THEN LET UD& = UD& + TABEL(AN%) * 3: LET LR& = LR& + TABEL(AN% + 90) * 3
+
+   IF A$ = CHR$(0) + "M" THEN LET AN% = AN% + 5
+   IF A$ = CHR$(0) + "K" THEN LET AN% = AN% - 5
+
+   IF AN% > 359 THEN AN% = AN% - 360
+   IF AN% < 0 THEN AN% = AN% + 360
+
+   IF MAP%(UD& \ 1024, LR& \ 1024) >= 1 THEN LET UD& = OUD&: LET LR& = OLR&
+
+   GOTO 100
+
+'- map for the 3d maze -
+   DATA 1,2,1,2,1,2,1,2,1,2,1
+   DATA 1,0,0,0,0,0,0,0,0,0,1
+   DATA 1,0,0,0,0,0,0,7,7,0,1
+   DATA 1,0,0,0,0,0,0,7,7,0,1
+   DATA 1,0,0,0,2,7,0,0,0,0,2
+   DATA 1,0,0,0,7,2,0,0,0,0,2
+   DATA 1,0,0,0,0,0,0,7,0,0,1
+   DATA 1,0,0,9,0,0,0,0,0,0,2
+   DATA 1,0,0,0,0,0,0,0,0,0,1
+   DATA 1,0,0,0,0,0,0,0,0,0,1
+   DATA 1,1,1,1,1,1,1,1,1,1,1
+

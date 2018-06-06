@@ -1,0 +1,1083 @@
+'*****************************************************************************
+'                              DELTA CODE PRESENTS
+'                                POWER ELF V2.1
+'                                      BY
+'                                  JAMES HEATH
+'                        LOOK AT THE README.TXT FOR HELP
+'*****************************************************************************
+
+   DEFINT A-Z
+   TYPE HUES
+     red AS INTEGER
+     grn AS INTEGER
+     blu AS INTEGER
+   END TYPE
+
+   SCREEN 13
+   pat$ = "c:\qb45\pelf\"
+
+'-set up sprites -
+   DIM Pal(255) AS HUES
+   DEF SEG = VARSEG(Pal(0))
+   BLOAD pat$ + "default.pal", 0
+   OUT &H3C8, 0
+   FOR atrib = 0 TO 255
+	OUT &H3C9, Pal(atrib).red
+	OUT &H3C9, Pal(atrib).grn
+	OUT &H3C9, Pal(atrib).blu
+   NEXT atrib
+
+   Filename$ = pat$ + "P-ELF.SPR"
+
+   OPEN Filename$ FOR BINARY AS #1
+	filesize& = LOF(1)
+   CLOSE #1
+   bytes = (filesize& - 7) \ 2 - 1
+   REDIM SPRITES(bytes)
+   DEF SEG = VARSEG(SPRITES(0))
+   BLOAD Filename$, 0
+   spritewidth = SPRITES(0) \ 8
+   spriteheight = SPRITES(1)
+   xsprites = 319 \ (spritewidth + 1)
+   xend = spritewidth * (xsprites - 1) + xsprites
+   EPS% = ((spritewidth * spriteheight) \ 2) + 3
+
+   GOSUB INTRO:
+
+'- setup varibles -
+   DIM MAP%(124, 124)
+   DIM UD%(1), LR%(1)
+   DIM OUD%(1), OLR%(1)
+   DIM L!(1), PL%(1), P%(1), SH%(1)
+   DIM TUD%(15), TLR%(15), GUN%(1)
+   DIM K%(1, 19), B%(1), HW%(1), PD%(1)
+   DIM EUD%(19), ELR%(19), ED%(19)
+   DIM RMUD%(7), RMLR%(7)
+   DIM ST%(10), SUD%(10), SLR%(10)
+   DIM EFUD%(19), EFLR%(19)
+   DIM E1UD%(19), E1LR%(19)
+   DIM G1UD%(50), G1LR%(50)
+   DIM G2UD%(50), G2LR%(50)
+   DIM G3UD%(50), G3LR%(50)
+   DIM G4UD%(50), G4LR%(50)
+
+   LET LEVEL& = 1
+50
+   LET T% = 0
+   LET L!(0) = 100
+   LET L!(1) = 100
+   LET E% = 0
+   LET G% = 0
+   LET F% = 0
+   LET H% = 0
+   LET G1% = 0
+   LET G2% = 0
+   LET G3% = 0
+   LET G4% = 0
+
+   FOR ZZ% = 0 TO 10
+	LET ST%(ZZ%) = -1
+   NEXT ZZ%
+   LET A$ = STR$(LEVEL&)
+   LET A$ = LTRIM$(A$)
+   C! = 47
+   T! = 0
+
+'- load level -
+   OPEN pat$ + "\L" + A$ + ".ELF" FOR INPUT AS #1
+	INPUT #1, N$, FE%
+   GOSUB 4000
+   LOCATE 11, 1: PRINT "------------------------------|"
+   LOCATE 12, 1: PRINT "______________________________|"
+   PUT (1 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 711), PSET
+   PUT (2 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 714), PSET
+   PUT (3 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 700), PSET
+   PUT (4 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 703), PSET
+   PUT (5 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 708), PSET
+   PUT (6 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 713), PSET
+   PUT (7 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 706), PSET
+   PUT (9 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 711), PSET
+   PUT (10 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 704), PSET
+   PUT (11 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 721), PSET
+   PUT (12 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 704), PSET
+   PUT (13 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 711), PSET
+
+   LOCATE 10, 15: PRINT LEVEL&
+   FOR ZZ% = 0 TO 124
+	FOR ZX% = 0 TO 124
+		INPUT #1, MAP%(ZZ%, ZX%)
+		LET T! = T! + .002
+		C! = C! + .001
+		LINE (T! * 8 - 8, 85)-(T! * 8 - 8, 91), C!
+	NEXT
+	LINE (0, 84)-(0, 92), 15
+   NEXT ZZ%
+   CLOSE #1
+
+   LET C! = 31
+   LET T! = 0
+   PUT (1 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 715), PSET
+   PUT (2 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 717), PSET
+   PUT (3 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 714), PSET
+   PUT (4 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 718), PSET
+   PUT (5 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 718), PSET
+   PUT (6 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 708), PSET
+   PUT (7 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 713), PSET
+   PUT (8 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 706), PSET
+   LOCATE 10, 9: PRINT "                 "
+
+'- parse loaded file for level -
+   FOR ZZ% = 0 TO 124
+	FOR ZX% = 0 TO 124
+		IF MAP%(ZZ%, ZX%) = 31 THEN LET UD%(0) = ZZ%: LET LR%(0) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 30 THEN LET UD%(1) = ZZ%: LET LR%(1) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 35 AND TUD%(0) = 0 THEN LET TUD%(0) = ZZ%: LET TLR%(0) = ZX%
+		IF MAP%(ZZ%, ZX%) = 35 AND TUD%(0) >= 1 THEN LET TUD%(1) = ZZ%: LET TLR%(1) = ZX%
+		IF MAP%(ZZ%, ZX%) = 37 AND TUD%(2) = 0 THEN LET TUD%(2) = ZZ%: LET TLR%(2) = ZX%
+		IF MAP%(ZZ%, ZX%) = 37 AND TUD%(2) >= 1 THEN LET TUD%(3) = ZZ%: LET TLR%(3) = ZX%
+		IF MAP%(ZZ%, ZX%) = 39 AND TUD%(4) = 0 THEN LET TUD%(4) = ZZ%: LET TLR%(4) = ZX%
+		IF MAP%(ZZ%, ZX%) = 39 AND TUD%(4) >= 1 THEN LET TUD%(5) = ZZ%: LET TLR%(5) = ZX%
+		IF MAP%(ZZ%, ZX%) = 41 AND TUD%(6) = 0 THEN LET TUD%(6) = ZZ%: LET TLR%(6) = ZX%
+		IF MAP%(ZZ%, ZX%) = 41 AND TUD%(6) >= 1 THEN LET TUD%(7) = ZZ%: LET TLR%(7) = ZX%
+		IF MAP%(ZZ%, ZX%) = 43 AND TUD%(8) = 0 THEN LET TUD%(8) = ZZ%: LET TLR%(8) = ZX%
+		IF MAP%(ZZ%, ZX%) = 43 AND TUD%(8) >= 1 THEN LET TUD%(9) = ZZ%: LET TLR%(9) = ZX%
+		IF MAP%(ZZ%, ZX%) = 45 AND TUD%(10) = 0 THEN LET TUD%(10) = ZZ%: LET TLR%(10) = ZX%
+		IF MAP%(ZZ%, ZX%) = 45 AND TUD%(10) >= 1 THEN LET TUD%(11) = ZZ%: LET TLR%(11) = ZX%
+		IF MAP%(ZZ%, ZX%) = 47 AND TUD%(12) = 0 THEN LET TUD%(12) = ZZ%: LET TLR%(12) = ZX%
+		IF MAP%(ZZ%, ZX%) = 47 AND TUD%(12) >= 1 THEN LET TUD%(13) = ZZ%: LET TLR%(13) = ZX%
+		IF MAP%(ZZ%, ZX%) = 49 AND TUD%(14) = 0 THEN LET TUD%(14) = ZZ%: LET TLR%(14) = ZX%
+		IF MAP%(ZZ%, ZX%) = 49 AND TUD%(14) >= 1 THEN LET TUD%(15) = ZZ%: LET TLR%(15) = ZX%
+		IF MAP%(ZZ%, ZX%) = 243 THEN BUD% = ZZ%: LET BLR% = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 244 THEN GUD% = ZZ%: LET GLR% = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 371 AND E% = 0 THEN LET E% = 1
+		IF MAP%(ZZ%, ZX%) = 372 AND E% = 0 THEN LET E% = 1
+		IF MAP%(ZZ%, ZX%) = 373 AND E% = 0 THEN LET E% = 1
+		IF MAP%(ZZ%, ZX%) = 374 AND E% = 0 THEN LET E% = 1
+		IF MAP%(ZZ%, ZX%) = 97 OR MAP%(ZZ%, ZX%) = 99 THEN EFUD%(F%) = ZZ%: LET EFLR%(F%) = ZX%: LET F% = F% + 1
+		IF MAP%(ZZ%, ZX%) = 101 OR MAP%(ZZ%, ZX%) = 103 THEN E1UD%(G%) = ZZ%: LET E1LR%(G%) = ZX%: LET G% = G% + 1
+		IF MAP%(ZZ%, ZX%) = 371 THEN LET EUD%(E%) = ZZ%: LET ELR%(E%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET ED%(E%) = 1: LET E% = E% + 1
+		IF MAP%(ZZ%, ZX%) = 372 THEN LET EUD%(E%) = ZZ%: LET ELR%(E%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET ED%(E%) = 2: LET E% = E% + 1
+		IF MAP%(ZZ%, ZX%) = 373 THEN LET EUD%(E%) = ZZ%: LET ELR%(E%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET ED%(E%) = 3: LET E% = E% + 1
+		IF MAP%(ZZ%, ZX%) = 374 THEN LET EUD%(E%) = ZZ%: LET ELR%(E%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET ED%(E%) = 4: LET E% = E% + 1
+		IF MAP%(ZZ%, ZX%) = 323 THEN RMUD%(0) = ZZ%: LET RMLR%(0) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 324 THEN RMUD%(1) = ZZ%: LET RMLR%(1) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 325 THEN RMUD%(2) = ZZ%: LET RMLR%(2) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 326 THEN RMUD%(3) = ZZ%: LET RMLR%(3) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 327 THEN RMUD%(4) = ZZ%: LET RMLR%(4) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 328 THEN RMUD%(5) = ZZ%: LET RMLR%(5) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 329 THEN RMUD%(6) = ZZ%: LET RMLR%(6) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 330 THEN RMUD%(7) = ZZ%: LET RMLR%(7) = ZX%: MAP%(ZZ%, ZX%) = 0
+		IF MAP%(ZZ%, ZX%) = 316 THEN G1UD%(G1%) = ZZ%: LET G1LR%(G1%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET G1% = G1% + 1
+		IF MAP%(ZZ%, ZX%) = 318 THEN G2UD%(G2%) = ZZ%: LET G2LR%(G2%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET G2% = G2% + 1
+		IF MAP%(ZZ%, ZX%) = 320 THEN G3UD%(G3%) = ZZ%: LET G3LR%(G3%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET G3% = G3% + 1
+		IF MAP%(ZZ%, ZX%) = 322 THEN G4UD%(G4%) = ZZ%: LET G4LR%(G4%) = ZX%: MAP%(ZZ%, ZX%) = 0: LET G4% = G4% + 1
+		LET T! = T! + .002
+		C! = C! + .001
+		LINE (T! * 8 - 8, 85)-(T! * 8 - 8, 91), C!
+	NEXT
+	LINE (0, 84)-(0, 92), 15
+   NEXT ZZ%
+   CLS
+   GOSUB 6000
+   GOSUB 5010
+100
+   IF L!(0) <= 0 AND L!(0) >= -49 THEN LET PD%(0) = 1: LET L!(0) = -50
+   IF L!(1) <= 0 AND L!(1) >= -49 THEN LET PD%(1) = 1: LET L!(1) = -50
+   IF L!(0) = -50 AND L!(1) = -50 THEN GOTO 250
+   IF PD%(0) = 1 THEN GOSUB 4800: LET PD%(0) = 0
+   IF PD%(1) = 1 THEN GOSUB 4810: LET PD%(1) = 0
+   DO
+	LET COUNT% = COUNT% + 1
+	IF COUNT% = 2500 THEN GOSUB 4950
+	IF COUNT% >= 5000 THEN GOSUB 5000: GOSUB 5010
+	LET A$ = INKEY$
+   LOOP UNTIL A$ <> ""
+   IF A$ = CHR$(27) THEN END
+   LET OUD%(0) = UD%(0): LET OLR%(0) = LR%(0)
+   LET OUD%(1) = UD%(1): LET OLR%(1) = LR%(1)
+   IF A$ = CHR$(0) + "H" THEN LET UD%(0) = UD%(0) - 1: LET PM% = 0: LET D0% = 3
+   IF A$ = CHR$(0) + "P" THEN LET UD%(0) = UD%(0) + 1: LET PM% = 0: LET D0% = 2
+   IF A$ = CHR$(0) + "K" THEN LET LR%(0) = LR%(0) - 1: LET PM% = 0: LET D0% = 0
+   IF A$ = CHR$(0) + "M" THEN LET LR%(0) = LR%(0) + 1: LET PM% = 0: LET D0% = 1
+   IF A$ = "[" THEN LET PM% = 0: GOTO 4830
+   IF A$ = "]" AND B%(0) > 0 THEN IF D0% = 3 THEN IF MAP%(UD%(0) - 1, LR%(0)) = 0 THEN LET MAP%(UD%(0) - 1, LR%(0)) = 95: GOTO 4820
+   IF A$ = "]" AND B%(0) > 0 THEN IF D0% = 2 THEN IF MAP%(UD%(0) + 1, LR%(0)) = 0 THEN LET MAP%(UD%(0) + 1, LR%(0)) = 95: GOTO 4820
+   IF A$ = "]" AND B%(0) > 0 THEN IF D0% = 0 THEN IF MAP%(UD%(0), LR%(0) - 1) = 0 THEN LET MAP%(UD%(0), LR%(0) - 1) = 95: GOTO 4820
+   IF A$ = "]" AND B%(0) > 0 THEN IF D0% = 1 THEN IF MAP%(UD%(0), LR%(0) + 1) = 0 THEN LET MAP%(UD%(0), LR%(0) + 1) = 95: GOTO 4820
+   IF A$ = CHR$(13) AND GUN%(0) = 1 THEN LET PM% = 0: GOTO 4780
+   IF A$ = "W" THEN LET UD%(1) = UD%(1) - 1: LET PM% = 1: LET D1% = 3
+   IF A$ = "S" THEN LET UD%(1) = UD%(1) + 1: LET PM% = 1: LET D1% = 2
+   IF A$ = "A" THEN LET LR%(1) = LR%(1) - 1: LET PM% = 1: LET D1% = 0
+   IF A$ = "D" THEN LET LR%(1) = LR%(1) + 1: LET PM% = 1: LET D1% = 1
+   IF A$ = "1" THEN LET PM% = 1: GOTO 4830
+   IF A$ = "2" AND B%(1) > 0 THEN IF D1% = 3 THEN IF MAP%(UD%(1) - 1, LR%(1)) = 0 THEN LET MAP%(UD%(1) - 1, LR%(1)) = 95: GOTO 4825
+   IF A$ = "2" AND B%(1) > 0 THEN IF D1% = 2 THEN IF MAP%(UD%(1) + 1, LR%(1)) = 0 THEN LET MAP%(UD%(1) + 1, LR%(1)) = 95: GOTO 4825
+   IF A$ = "2" AND B%(1) > 0 THEN IF D1% = 0 THEN IF MAP%(UD%(1), LR%(1) - 1) = 0 THEN LET MAP%(UD%(1), LR%(1) - 1) = 95: GOTO 4825
+   IF A$ = "2" AND B%(1) > 0 THEN IF D1% = 1 THEN IF MAP%(UD%(1), LR%(1) + 1) = 0 THEN LET MAP%(UD%(1), LR%(1) + 1) = 95: GOTO 4825
+   IF A$ = "Q" AND GUN%(1) = 1 THEN LET PM% = 1: GOTO 4780
+110
+
+   IF UD%(PM%) = TUD%(0) AND LR%(PM%) = TLR%(0) THEN LET OS% = 1: GOSUB 4900
+   IF UD%(PM%) = TUD%(1) AND LR%(PM%) = TLR%(1) THEN LET OS% = 0: GOSUB 4900
+   IF UD%(PM%) = TUD%(2) AND LR%(PM%) = TLR%(2) THEN LET OS% = 3: GOSUB 4900
+   IF UD%(PM%) = TUD%(3) AND LR%(PM%) = TLR%(3) THEN LET OS% = 2: GOSUB 4900
+   IF UD%(PM%) = TUD%(4) AND LR%(PM%) = TLR%(4) THEN LET OS% = 5: GOSUB 4900
+   IF UD%(PM%) = TUD%(5) AND LR%(PM%) = TLR%(5) THEN LET OS% = 4: GOSUB 4900
+   IF UD%(PM%) = TUD%(6) AND LR%(PM%) = TLR%(6) THEN LET OS% = 7: GOSUB 4900
+   IF UD%(PM%) = TUD%(7) AND LR%(PM%) = TLR%(7) THEN LET OS% = 6: GOSUB 4900
+   IF UD%(PM%) = TUD%(8) AND LR%(PM%) = TLR%(8) THEN LET OS% = 9: GOSUB 4900
+   IF UD%(PM%) = TUD%(9) AND LR%(PM%) = TLR%(9) THEN LET OS% = 8: GOSUB 4900
+   IF UD%(PM%) = TUD%(10) AND LR%(PM%) = TLR%(10) THEN LET OS% = 11: GOSUB 4900
+   IF UD%(PM%) = TUD%(11) AND LR%(PM%) = TLR%(11) THEN LET OS% = 10: GOSUB 4900
+   IF UD%(PM%) = TUD%(12) AND LR%(PM%) = TLR%(12) THEN LET OS% = 13: GOSUB 4900
+   IF UD%(PM%) = TUD%(13) AND LR%(PM%) = TLR%(13) THEN LET OS% = 12: GOSUB 4900
+   IF UD%(PM%) = TUD%(14) AND LR%(PM%) = TLR%(14) THEN LET OS% = 15: GOSUB 4900
+   IF UD%(PM%) = TUD%(15) AND LR%(PM%) = TLR%(15) THEN LET OS% = 14: GOSUB 4900
+
+200
+   IF UD%(0) = UD%(1) AND LR%(0) = LR%(1) THEN LET LR%(1) = OLR%(0): LET UD%(1) = OUD%(0): LET LR%(0) = OLR%(1): LET UD%(0) = OUD%(1)
+   IF MAP%(UD%(PM%), LR%(PM%)) <> 0 THEN GOSUB 6100
+   IF BB% = 1 THEN LET BB% = 0: GOSUB 4790
+   IF EN% = 1 THEN LET EN% = 0: GOTO 250
+   GOSUB 5010
+   GOTO 100
+
+'- end of level -
+250
+   CLS
+   LET LEVEL& = LEVEL& + 1
+   PRINT "LEVEL"; LEVEL& - 1; " "; N$
+   PRINT "/\/\/\/\/\/\/\/\/\/\/\/\/\/\"
+   PRINT "PLAYER 1 LIFE"; L!(1)
+   PRINT "PLAYER 2 LIFE"; L!(0)
+   PRINT "PLAYER 1 POINTS"; P%(1)
+   PRINT "PLAYER 2 POINTS"; P%(0)
+   PRINT "/\/\/\/\/\/\/\/\/\/\/\/\/\/\"
+   LET P%(0) = P%(0) + L!(0)
+   LET P%(1) = P%(1) + L!(1)
+   IF P%(0) > P%(1) THEN PRINT "PLAYER 2 WINS"
+   IF P%(1) > P%(0) THEN PRINT "PLAYER 1 WINS"
+   IF P%(0) = P%(1) THEN PRINT "IT A TIE"
+   PRINT "/\/\/\/\/\/\/\/\/\/\/\/\/\/\"
+251
+   IF LEVEL& = 6 THEN GOTO 1000
+   LOCATE 10, 1: PRINT "PLAY NEXT LEVEL?(Y\N)"; : INPUT A$
+   IF A$ = "Y" OR A$ = "y" THEN GOTO 255
+   IF A$ = "N" OR A$ = "n" THEN END
+   GOTO 251
+'- reset varibles -
+255
+   FOR ZZ% = 0 TO 1
+	PL%(ZZ%) = 0
+	P%(ZZ%) = 0
+	GUN%(ZZ%) = 0
+	B%(ZZ%) = 0
+	HW%(ZZ%) = 0
+   NEXT
+   FOR ZZ% = 0 TO 7
+	RMUD%(ZZ%) = 0
+	RMLR%(ZZ%) = 0
+   NEXT
+   FOR ZZ% = 0 TO 10
+	ST%(ZZ%) = 0
+	SUD%(ZZ%) = 0
+	SLR%(ZZ%) = 0
+   NEXT
+   FOR ZZ% = 0 TO 15
+	TUD%(ZZ%) = 0
+	TLR%(ZZ%) = 0
+   NEXT
+   FOR ZZ% = 0 TO 19
+	EUD%(ZZ%) = 0
+	ELR%(ZZ%) = 0
+	ED%(ZZ%) = 0
+	EFUD%(ZZ%) = 0
+	EFLR%(ZZ%) = 0
+	E1UD%(ZZ%) = 0
+	E1LR%(ZZ%) = 0
+   NEXT
+   FOR ZZ% = 0 TO 1
+	FOR ZX% = 0 TO 12
+		K%(ZZ%, ZX%) = 0
+	NEXT ZX%
+   NEXT ZZ%
+   CLS
+   GOTO 50
+
+'- ending credits -
+1000
+   LOCATE 24, 1: PRINT "             POWER ELF  BY             "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "======================================="
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "             JAMES  HEATH              "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "          CONCEPT OF POWER ELF         "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\"
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "              JAMES  HEATH             "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "               TESTED BY               "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "              JAMES HEATH              "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "               JOE  KING               "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "            THE POWER ELF`S            "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "               THANKS TO               "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "***************************************"
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "               JOE  KING               "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "              TIM  TRUMAN              "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                                       "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "          THINKS FOR  PLAYING          "
+   SLEEP (1)
+   LOCATE 24, 1: PRINT "                 BYE                   "
+   SLEEP (1)
+
+   FOR ZZ% = 1 TO 24
+	LOCATE 24, 1: PRINT "                                       "
+	SLEEP (1)
+   NEXT
+
+'- next level? -
+1001
+   LOCATE 1, 1: PRINT "PLAY AGAIN (Y/N)"; : INPUT AN$
+   IF AN$ = "Y" OR AN$ = "y" THEN LET LEVEL& = 1: GOTO 50
+   IF AN$ = "N" OR AN$ = "n" THEN GOTO 1002
+   GOTO 1001
+1002
+   SCREEN 0
+   COLOR 14, 1
+   CLS
+   END
+
+'- read level info and post in sprite letters -
+4000
+   Q% = 0
+   R% = 0
+   DO
+	LET R% = R% + 1
+	LET D$ = MID$(N$, R%, 1)
+	IF D$ = "" THEN LET Q% = 1
+	IF D$ = " " THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 0), PSET
+	IF D$ = "A" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 700), PSET
+	IF D$ = "B" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 701), PSET
+	IF D$ = "C" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 702), PSET
+	IF D$ = "D" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 703), PSET
+	IF D$ = "E" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 704), PSET
+	IF D$ = "F" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 705), PSET
+	IF D$ = "G" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 706), PSET
+	IF D$ = "H" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 707), PSET
+	IF D$ = "I" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 708), PSET
+	IF D$ = "J" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 709), PSET
+	IF D$ = "K" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 710), PSET
+	IF D$ = "L" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 711), PSET
+	IF D$ = "M" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 712), PSET
+	IF D$ = "N" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 713), PSET
+	IF D$ = "O" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 714), PSET
+	IF D$ = "P" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 715), PSET
+	IF D$ = "Q" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 716), PSET
+	IF D$ = "R" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 717), PSET
+	IF D$ = "S" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 718), PSET
+	IF D$ = "T" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 719), PSET
+	IF D$ = "U" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 720), PSET
+	IF D$ = "V" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 721), PSET
+	IF D$ = "W" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 722), PSET
+	IF D$ = "X" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 723), PSET
+	IF D$ = "Y" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 724), PSET
+	IF D$ = "Z" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 725), PSET
+	IF D$ = "!" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 726), PSET
+	IF D$ = "/" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 727), PSET
+	IF D$ = "." THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 728), PSET
+	IF D$ = ">" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 729), PSET
+	IF D$ = "," THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 730), PSET
+	IF D$ = "<" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 731), PSET
+	IF D$ = ":" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 732), PSET
+	IF D$ = ";" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 733), PSET
+	IF D$ = "*" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 734), PSET
+	IF D$ = "'" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 735), PSET
+	IF D$ = "=" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 736), PSET
+	IF D$ = "+" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 737), PSET
+	IF D$ = "1" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 738), PSET
+	IF D$ = "2" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 739), PSET
+	IF D$ = "3" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 740), PSET
+	IF D$ = "4" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 741), PSET
+	IF D$ = "5" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 742), PSET
+	IF D$ = "6" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 743), PSET
+	IF D$ = "7" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 744), PSET
+	IF D$ = "8" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 745), PSET
+	IF D$ = "9" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 746), PSET
+	IF D$ = "0" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 747), PSET
+	IF D$ = "~" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 748), PSET
+	IF D$ = "`" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 749), PSET
+	IF D$ = "!" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 750), PSET
+	IF D$ = "@" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 751), PSET
+	IF D$ = "#" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 752), PSET
+	IF D$ = "$" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 753), PSET
+	IF D$ = "%" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 754), PSET
+	IF D$ = "^" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 755), PSET
+	IF D$ = "&" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 756), PSET
+	IF D$ = "*" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 757), PSET
+	IF D$ = "(" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 758), PSET
+	IF D$ = ")" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 759), PSET
+	IF D$ = "-" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 760), PSET
+	IF D$ = "_" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 761), PSET
+	IF D$ = "[" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 762), PSET
+	IF D$ = "]" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 763), PSET
+	IF D$ = "}" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 764), PSET
+	IF D$ = "{" THEN PUT (R% * 8 - 8, 9 * 8 - 8), SPRITES(EPS% * 765), PSET
+   LOOP UNTIL Q% = 1
+   RETURN
+
+4780
+   LET M% = 0
+   LET U% = 0
+   LET L% = 0
+   DO
+	IF PM% = 0 AND D0% = 3 THEN LET U% = U% - 1
+	IF PM% = 0 AND D0% = 2 THEN LET U% = U% + 1
+	IF PM% = 0 AND D0% = 0 THEN LET L% = L% - 1
+	IF PM% = 0 AND D0% = 1 THEN LET L% = L% + 1
+	IF PL%(PM%) <= 0 THEN LET M% = 1: GOTO 4781
+	LET PL%(PM%) = PL%(PM%) - 1
+	IF PM% = 0 THEN IF D0% = 3 OR D0% = 2 THEN IF MAP%(UD%(0) + U%, LR%(0)) = 0 THEN MAP%(UD%(0) + U%, LR%(0)) = 766:  ELSE LET M% = 1
+	IF PM% = 0 THEN IF D0% = 1 OR D0% = 0 THEN IF MAP%(UD%(0), LR%(0) + L%) = 0 THEN MAP%(UD%(0), LR%(0) + L%) = 765:  ELSE LET M% = 1
+	IF SH%(1) = 0 THEN IF PM% = 0 THEN IF UD%(0) + U% = UD%(1) AND LR%(0) + L% = LR%(1) THEN LET L!(1) = L!(1) - 4: LET M% = 1
+	IF SH%(1) > 0 THEN IF PM% = 0 THEN IF UD%(0) + U% = UD%(1) AND LR%(0) + L% = LR%(1) THEN LET M% = 1
+
+	IF PM% = 1 AND D1% = 3 THEN LET U% = U% - 1
+	IF PM% = 1 AND D1% = 2 THEN LET U% = U% + 1
+	IF PM% = 1 AND D1% = 0 THEN LET L% = L% - 1
+	IF PM% = 1 AND D1% = 1 THEN LET L% = L% + 1
+	IF PM% = 1 THEN IF D1% = 3 OR D1% = 2 THEN IF MAP%(UD%(1) + U%, LR%(1)) = 0 THEN MAP%(UD%(1) + U%, LR%(1)) = 766:  ELSE LET M% = 1
+	IF PM% = 1 THEN IF D1% = 1 OR D1% = 0 THEN IF MAP%(UD%(1), LR%(1) + L%) = 0 THEN MAP%(UD%(1), LR%(1) + L%) = 765:  ELSE LET M% = 1
+	IF SH%(0) = 0 THEN IF PM% = 1 THEN IF UD%(1) + U% = UD%(0) AND LR%(1) + L% = LR%(0) THEN LET L!(0) = L!(0) - 4: LET M% = 1
+	IF SH%(0) > 0 THEN IF PM% = 1 THEN IF UD%(1) + U% = UD%(0) AND LR%(1) + L% = LR%(0) THEN LET M% = 1
+
+4781
+   LOOP UNTIL M% = 1
+   LET M% = 0
+   LET U% = 0
+   LET L% = 0
+   GOSUB 5010
+   DO
+	IF PM% = 0 AND D0% = 3 THEN LET U% = U% - 1
+	IF PM% = 0 AND D0% = 2 THEN LET U% = U% + 1
+	IF PM% = 0 AND D0% = 0 THEN LET L% = L% - 1
+	IF PM% = 0 AND D0% = 1 THEN LET L% = L% + 1
+	IF PM% = 0 THEN IF D0% = 3 OR D0% = 2 THEN IF MAP%(UD%(0) + U%, LR%(0)) = 766 THEN MAP%(UD%(0) + U%, LR%(0)) = 0 ELSE LET M% = 1
+	IF PM% = 0 THEN IF D0% = 1 OR D0% = 0 THEN IF MAP%(UD%(0), LR%(0) + L%) = 765 THEN MAP%(UD%(0), LR%(0) + L%) = 0 ELSE LET M% = 1
+	IF PM% = 1 AND D1% = 3 THEN LET U% = U% - 1
+	IF PM% = 1 AND D1% = 2 THEN LET U% = U% + 1
+	IF PM% = 1 AND D1% = 0 THEN LET L% = L% - 1
+	IF PM% = 1 AND D1% = 1 THEN LET L% = L% + 1
+	IF PM% = 1 THEN IF D1% = 3 OR D1% = 2 THEN IF MAP%(UD%(1) + U%, LR%(1)) = 766 THEN MAP%(UD%(1) + U%, LR%(1)) = 0 ELSE LET M% = 1
+	IF PM% = 1 THEN IF D1% = 1 OR D1% = 0 THEN IF MAP%(UD%(1), LR%(1) + L%) = 765 THEN MAP%(UD%(1), LR%(1) + L%) = 0 ELSE LET M% = 1
+   LOOP UNTIL M% = 1
+   GOSUB 5010
+   GOTO 200
+
+4790
+   FOR ZZ% = 0 TO 19
+	LET MAP%(EFUD%(ZZ%), EFLR%(ZZ%)) = 0
+   NEXT ZZ%
+   RETURN
+
+4800
+   IF P%(0) <= 499 THEN GOTO 4805
+   LET UD%(0) = GUD%
+   LET LR%(0) = GLR%
+   RETURN
+4805
+   LET UD%(0) = BUD%
+   LET LR%(0) = BLR%
+   RETURN
+4810
+   IF P%(1) <= 499 THEN GOTO 4815
+   LET UD%(1) = GUD%
+   LET LR%(1) = GLR%
+   RETURN
+4815
+   LET UD%(1) = BUD%
+   LET LR%(1) = BLR%
+   RETURN
+
+4820
+   LET B%(0) = B%(0) - 1
+   FOR ZZ% = 0 TO 10
+	IF ST%(ZZ%) = -1 AND D0% = 3 THEN SUD%(ZZ%) = UD%(0) - 1: LET SLR%(ZZ%) = LR%(0)
+	IF ST%(ZZ%) = -1 AND D0% = 2 THEN SUD%(ZZ%) = UD%(0) + 1: LET SLR%(ZZ%) = LR%(0)
+	IF ST%(ZZ%) = -1 AND D0% = 0 THEN SUD%(ZZ%) = UD%(0): LET SLR%(ZZ%) = LR%(0) - 1
+	IF ST%(ZZ%) = -1 AND D0% = 1 THEN SUD%(ZZ%) = UD%(0): LET SLR%(ZZ%) = LR%(0) + 1
+	IF ST%(ZZ%) = -1 THEN LET ST%(ZZ%) = 10: EXIT FOR
+   NEXT
+   GOTO 200
+
+4825
+   LET B%(1) = B%(1) - 1
+   FOR ZZ% = 0 TO 10
+	IF ST%(ZZ%) = -1 AND D1% = 3 THEN SUD%(ZZ%) = UD%(1) - 1: LET SLR%(ZZ%) = LR%(1)
+	IF ST%(ZZ%) = -1 AND D1% = 2 THEN SUD%(ZZ%) = UD%(1) + 1: LET SLR%(ZZ%) = LR%(1)
+	IF ST%(ZZ%) = -1 AND D1% = 0 THEN SUD%(ZZ%) = UD%(1): LET SLR%(ZZ%) = LR%(1) - 1
+	IF ST%(ZZ%) = -1 AND D1% = 1 THEN SUD%(ZZ%) = UD%(1): LET SLR%(ZZ%) = LR%(1) + 1
+	IF ST%(ZZ%) = -1 THEN LET ST%(ZZ%) = 10: EXIT FOR
+   NEXT
+   GOTO 200
+
+4830
+   IF SH%(1) = 0 THEN IF PM% = 0 AND D0% = 3 AND UD%(0) - 1 = UD%(1) AND LR%(0) = LR%(1) THEN LET L!(1) = L!(1) - HW%(0): GOSUB 6110: GOTO 200
+   IF SH%(1) = 0 THEN IF PM% = 0 AND D0% = 2 AND UD%(0) + 1 = UD%(1) AND LR%(0) = LR%(1) THEN LET L!(1) = L!(1) - HW%(0): GOSUB 6110: GOTO 200
+   IF SH%(1) = 0 THEN IF PM% = 0 AND D0% = 0 AND UD%(0) = UD%(1) AND LR%(0) - 1 = LR%(1) THEN LET L!(1) = L!(1) - HW%(0): GOSUB 6110: GOTO 200
+   IF SH%(1) = 0 THEN IF PM% = 0 AND D0% = 1 AND UD%(0) = UD%(1) AND LR%(0) + 1 = LR%(1) THEN LET L!(1) = L!(1) - HW%(0): GOSUB 6110: GOTO 200
+
+   IF SH%(0) = 0 THEN IF PM% = 1 AND D1% = 3 AND UD%(1) - 1 = UD%(0) AND LR%(1) = LR%(0) THEN LET L!(0) = L!(0) - HW%(1): GOSUB 6110: GOTO 200
+   IF SH%(0) = 0 THEN IF PM% = 1 AND D1% = 2 AND UD%(1) + 1 = UD%(0) AND LR%(1) = LR%(0) THEN LET L!(0) = L!(0) - HW%(1): GOSUB 6110: GOTO 200
+   IF SH%(0) = 0 THEN IF PM% = 1 AND D1% = 0 AND UD%(1) = UD%(0) AND LR%(1) - 1 = LR%(0) THEN LET L!(0) = L!(0) - HW%(1): GOSUB 6110: GOTO 200
+   IF SH%(0) = 0 THEN IF PM% = 1 AND D1% = 1 AND UD%(1) = UD%(0) AND LR%(1) + 1 = LR%(0) THEN LET L!(0) = L!(0) - HW%(1): GOSUB 6110: GOTO 200
+
+   IF PM% = 0 AND D0% = 3 THEN LET MW% = MAP%(UD%(0) - 1, LR%(0)): GOTO 4831
+   IF PM% = 0 AND D0% = 2 THEN LET MW% = MAP%(UD%(0) + 1, LR%(0)): GOTO 4831
+   IF PM% = 0 AND D0% = 0 THEN LET MW% = MAP%(UD%(0), LR%(0) - 1): GOTO 4831
+   IF PM% = 0 AND D0% = 1 THEN LET MW% = MAP%(UD%(0), LR%(0) + 1): GOTO 4831
+   IF PM% = 1 AND D1% = 3 THEN LET MW% = MAP%(UD%(1) - 1, LR%(1)): GOTO 4835
+   IF PM% = 1 AND D1% = 2 THEN LET MW% = MAP%(UD%(1) + 1, LR%(1)): GOTO 4835
+   IF PM% = 1 AND D1% = 0 THEN LET MW% = MAP%(UD%(1), LR%(1) - 1): GOTO 4835
+   IF PM% = 1 AND D1% = 1 THEN LET MW% = MAP%(UD%(1), LR%(1) + 1): GOTO 4835
+
+4831
+   IF HW%(0) > 0 THEN IF MW% >= 507 AND MW% <= 509 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 490 AND MW% <= 501 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 525 AND MW% <= 536 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 525 AND MW% <= 536 THEN MW% = 0: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 502 AND MW% <= 506 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 537 AND MW% <= 541 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 571 AND MW% <= 576 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 606 AND MW% <= 611 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 641 AND MW% <= 646 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% >= 676 AND MW% <= 681 THEN MW% = 0: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 432 THEN MW% = MW% + 35: LET BB% = 1: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 73 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 75 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 77 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 79 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 81 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 187 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 191 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 426 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 195 THEN MW% = MW% + 35: GOTO 4832
+   IF HW%(0) > 0 THEN IF MW% = 199 THEN MW% = MW% + 35: GOTO 4832
+   IF MW% = 397 THEN MW% = MW% + 1: GOTO 4833
+   IF MW% = 398 THEN MW% = MW% - 1: GOTO 4833
+4832
+   IF D0% = 3 THEN MAP%(UD%(0) - 1, LR%(0)) = MW%: GOTO 200
+   IF D0% = 2 THEN MAP%(UD%(0) + 1, LR%(0)) = MW%: GOTO 200
+   IF D0% = 0 THEN MAP%(UD%(0), LR%(0) - 1) = MW%: GOTO 200
+   IF D0% = 1 THEN MAP%(UD%(0), LR%(0) + 1) = MW%: GOTO 200
+4833
+   IF D0% = 1 THEN MAP%(UD%(0), LR%(0) + 1) = MW% ELSE GOTO 200
+   FOR ZZ% = 0 TO 19
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 101 AND MW% = 398 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 340: GOTO 4834
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 103 AND MW% = 398 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 341: GOTO 4834
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 340 AND MW% = 397 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 101: GOTO 4834
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 341 AND MW% = 397 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 103: GOTO 4834
+	4834
+   NEXT ZZ%
+   GOTO 200
+
+4835
+   IF HW%(1) > 0 THEN IF MW% >= 507 AND MW% <= 509 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 490 AND MW% <= 501 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 525 AND MW% <= 536 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 525 AND MW% <= 536 THEN MW% = 0: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 502 AND MW% <= 506 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 537 AND MW% <= 541 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 571 AND MW% <= 576 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 606 AND MW% <= 611 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 641 AND MW% <= 646 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% >= 676 AND MW% <= 681 THEN MW% = 0: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 432 THEN MW% = MW% + 35: LET BB% = 1: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 73 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 75 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 77 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 79 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 81 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 187 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 191 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 426 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 195 THEN MW% = MW% + 35: GOTO 4836
+   IF HW%(1) > 0 THEN IF MW% = 199 THEN MW% = MW% + 35: GOTO 4836
+   IF MW% = 397 THEN MW% = MW% + 1: GOTO 4837
+   IF MW% = 398 THEN MW% = MW% - 1: GOTO 4837
+4836
+   IF D1% = 3 THEN MAP%(UD%(1) - 1, LR%(1)) = MW%: GOTO 200
+   IF D1% = 2 THEN MAP%(UD%(1) + 1, LR%(1)) = MW%: GOTO 200
+   IF D1% = 0 THEN MAP%(UD%(1), LR%(1) - 1) = MW%: GOTO 200
+   IF D1% = 1 THEN MAP%(UD%(1), LR%(1) + 1) = MW%: GOTO 200
+4837
+   IF D1% = 1 THEN MAP%(UD%(1), LR%(1) + 1) = MW% ELSE GOTO 200
+   FOR ZZ% = 0 TO 19
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 101 AND MW% = 398 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 340: GOTO 4838
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 103 AND MW% = 398 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 341: GOTO 4838
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 340 AND MW% = 397 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 101: GOTO 4838
+	IF MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 341 AND MW% = 397 THEN LET MAP%(E1UD%(ZZ%), E1LR%(ZZ%)) = 103: GOTO 4838
+	4838
+   NEXT ZZ%
+   GOTO 200
+
+
+4900
+   FOR ZX% = 1 TO -1 STEP -1
+	FOR ZZ% = 1 TO -1 STEP -1
+		LET UD%(PM%) = TUD%(OS%) - ZX%
+		LET LR%(PM%) = TLR%(OS%) - ZZ%
+		IF MAP%(UD%(PM%), LR%(PM%)) = 0 THEN RETURN
+	NEXT ZZ%
+   NEXT ZX%
+   RETURN
+
+
+
+4950
+   IF E% = 0 THEN RETURN
+   FOR ZZ% = 1 TO E%
+	IF ED%(ZZ%) = 1 THEN LET EUD%(ZZ%) = EUD%(ZZ%) + 1: GOTO 4951
+	IF ED%(ZZ%) = 2 THEN LET EUD%(ZZ%) = EUD%(ZZ%) - 1: GOTO 4951
+	IF ED%(ZZ%) = 3 THEN LET ELR%(ZZ%) = ELR%(ZZ%) + 1: GOTO 4951
+	IF ED%(ZZ%) = 4 THEN LET ELR%(ZZ%) = ELR%(ZZ%) - 1
+	4951
+	IF MAP%(EUD%(ZZ%), ELR%(ZZ%)) = 336 THEN LET ED%(ZZ%) = 2: GOTO 4952
+	IF MAP%(EUD%(ZZ%), ELR%(ZZ%)) = 337 THEN LET ED%(ZZ%) = 1: GOTO 4952
+	IF MAP%(EUD%(ZZ%), ELR%(ZZ%)) = 338 THEN LET ED%(ZZ%) = 3: GOTO 4952
+	IF MAP%(EUD%(ZZ%), ELR%(ZZ%)) = 339 THEN LET ED%(ZZ%) = 4
+	4952
+	IF EUD%(ZZ%) = UD%(0) AND ELR%(ZZ%) = LR%(0) THEN LET L!(0) = L!(0) - 5
+	IF EUD%(ZZ%) = UD%(1) AND ELR%(ZZ%) = LR%(1) THEN LET L!(1) = L!(1) - 5
+   NEXT ZZ%
+   RETURN
+
+5000
+   LET COUNT% = 0
+   LET T2% = T2% + 1
+   LET T3% = T3% + 1
+   LET T4% = T4% + 1
+   LET T5% = T5% + 1
+   LET T8% = T8% + 1
+   IF T2% = 2 THEN LET T2% = 0
+   IF T3% = 3 THEN LET T3% = 0
+   IF T4% = 4 THEN LET T4% = 0
+   IF T5% = 5 THEN LET T5% = 0
+   IF T8% = 8 THEN LET T8% = 0
+   IF SH%(0) > 0 THEN LET SH%(0) = SH%(0) - 1
+   IF SH%(1) > 0 THEN LET SH%(1) = SH%(1) - 1
+
+   FOR ZZ% = 0 TO 10
+	IF ST%(ZZ%) > 0 THEN LET ST%(ZZ%) = ST%(ZZ%) - 1
+	IF ST%(ZZ%) = 0 THEN LET ZV% = ZZ%: GOTO 5005
+	5001
+   NEXT ZZ%
+
+   FOR ZX% = 0 TO 6
+	FOR ZZ% = 0 TO 1
+		IF UD%(ZZ%) >= RMUD%(ZX%) AND UD%(ZZ%) <= RMUD%(ZX% + 1) THEN
+		IF LR%(ZZ%) >= RMLR%(ZX%) AND LR%(ZZ%) <= RMLR%(ZX% + 1) THEN LET L!(ZZ%) = L!(ZZ%) - .5: IF L!(ZZ%) < 0 THEN LET L!(ZZ%) = 0
+		END IF
+	NEXT ZZ%
+   NEXT ZX%
+   LOCATE 18, 13: PRINT USING "####"; L!(1)
+   LOCATE 19, 15: PRINT P%(1)
+   LOCATE 20, 15: PRINT PL%(1)
+   LOCATE 21, 15: PRINT SH%(1)
+   LOCATE 22, 15: PRINT B%(1)
+   LOCATE 18, 26: PRINT USING "####"; L!(0)
+   LOCATE 19, 28: PRINT P%(0)
+   LOCATE 20, 28: PRINT PL%(0)
+   LOCATE 21, 28: PRINT SH%(0)
+   LOCATE 22, 28: PRINT B%(0)
+   RETURN
+
+5005
+   MAP%(SUD%(ZV%), SLR%(ZV%)) = 0
+   FOR ZX% = -1 TO 1
+	FOR ZC% = -1 TO 1
+		IF MAP%(SUD%(ZV%) - ZX%, SLR%(ZV%) - ZC%) = 0 THEN MAP%(SUD%(ZV%) - ZX%, SLR%(ZV%) - ZC%) = 420: LET ST%(ZV%) = -1
+	NEXT ZC%
+   NEXT ZX%
+   LET ZZ% = ZV%
+   GOTO 5001
+
+5010
+   FOR ZZ% = -4 TO 4
+	FOR ZX% = -4 TO 4
+		IF ZZ% = 0 AND ZX% = 0 THEN 5021
+		IF FE% = 280 THEN LET FE1% = 280 + T8%
+		IF FE% = 288 THEN LET FE1% = 288 + T8%
+		IF FE% = 239 THEN LET FE1% = 239
+		IF UD%(0) - ZX% <= -1 THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5012
+		IF UD%(0) - ZX% >= 125 THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5012
+		IF LR%(0) - ZZ% <= -1 THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5012
+		IF LR%(0) - ZZ% >= 125 THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5012
+		IF SH%(1) = 0 THEN IF UD%(0) - ZX% = UD%(1) AND LR%(0) - ZZ% = LR%(1) THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (D1% + 1)), PSET: GOTO 5012
+		IF SH%(1) > 0 THEN IF UD%(0) - ZX% = UD%(1) AND LR%(0) - ZZ% = LR%(1) THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (D1% + 5)), PSET: GOTO 5012
+		IF E% > 0 THEN
+		FOR ZC% = 1 TO E%
+			IF T2% = 0 THEN IF UD%(0) - ZX% = EUD%(ZC%) AND LR%(0) - ZZ% = ELR%(ZC%) THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (520 + ED%(ZC%))), PSET: LET JTE% = 1
+			IF T2% = 1 THEN IF UD%(0) - ZX% = EUD%(ZC%) AND LR%(0) - ZZ% = ELR%(ZC%) THEN PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (555 + ED%(ZC%))), PSET: LET JTE% = 1
+		NEXT ZC%
+		END IF
+		IF JTE% = 1 THEN LET JTE% = 0: GOTO 5012
+		LET AN% = MAP%(UD%(0) - ZX%, LR%(0) - ZZ%)
+		LET O% = 1
+		GOTO 5040
+		5011
+		PUT ((25 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * AN%), PSET
+
+		5012
+		IF UD%(1) - ZX% <= -1 THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5021
+		IF UD%(1) - ZX% >= 125 THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5021
+		IF LR%(1) - ZZ% <= -1 THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5021
+		IF LR%(1) - ZZ% >= 125 THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * FE1%), PSET: GOTO 5021
+		IF SH%(0) = 0 THEN IF UD%(1) - ZX% = UD%(0) AND LR%(1) - ZZ% = LR%(0) THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (D0% + 13)), PSET: GOTO 5021
+		IF SH%(0) > 0 THEN IF UD%(1) - ZX% = UD%(0) AND LR%(1) - ZZ% = LR%(0) THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (D0% + 17)), PSET: GOTO 5021
+		IF E% > 0 THEN
+		FOR ZC% = 1 TO E%
+			IF T2% = 0 THEN IF UD%(1) - ZX% = EUD%(ZC%) AND LR%(1) - ZZ% = ELR%(ZC%) THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (520 + ED%(ZC%))), PSET: LET JTE% = 1
+			IF T2% = 1 THEN IF UD%(1) - ZX% = EUD%(ZC%) AND LR%(1) - ZZ% = ELR%(ZC%) THEN PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * (555 + ED%(ZC%))), PSET: LET JTE% = 1
+		NEXT ZC%
+		END IF
+		IF JTE% = 1 THEN LET JTE% = 0: GOTO 5021
+		LET AN% = MAP%(UD%(1) - ZX%, LR%(1) - ZZ%)
+		LET O% = 2
+		GOTO 5040
+		5020
+		PUT ((12 - ZZ%) * 8 - 8, (12 - ZX%) * 8 - 8), SPRITES%(EPS% * AN%), PSET
+		5021
+	NEXT ZX%
+   NEXT ZZ%
+   IF SH%(0) = 0 THEN PUT (25 * 8 - 8, 12 * 8 - 8), SPRITES(EPS% * (D0% + 13)), PSET
+   IF SH%(1) = 0 THEN PUT (12 * 8 - 8, 12 * 8 - 8), SPRITES(EPS% * (D1% + 1)), PSET
+   IF SH%(0) > 0 THEN PUT (25 * 8 - 8, 12 * 8 - 8), SPRITES(EPS% * (D0% + 17)), PSET
+   IF SH%(1) > 0 THEN PUT (12 * 8 - 8, 12 * 8 - 8), SPRITES(EPS% * (D1% + 5)), PSET
+5030
+   RETURN
+
+5040
+   IF AN% >= 35 AND AN% <= 104 THEN LET AN% = AN% + T2%
+   IF AN% >= 420 AND AN% <= 435 THEN LET AN% = AN% + T3%
+   IF AN% >= 140 AND AN% <= 205 THEN LET AN% = AN% + T4%
+   IF AN% >= 244 AND AN% <= 276 THEN LET AN% = AN% + T5%
+   IF AN% >= 280 AND AN% <= 312 THEN LET AN% = AN% + T8%
+   IF AN% >= 315 AND AN% <= 341 THEN LET AN% = 0
+   IF AN% = 101 THEN LET AN% = 101 + T2%
+   IF AN% = 103 THEN LET AN% = 103 + T2%
+   IF O% = 1 THEN GOTO 5011
+   IF O% = 2 THEN GOTO 5020
+
+6000
+COLOR 1
+FOR ZZ% = 7 TO 17
+	LOCATE ZZ%, 7: PRINT "л         л  л         л"
+NEXT
+   LOCATE 7, 8: PRINT "лллллллллл  ллллллллллл"
+   LOCATE 17, 8: PRINT "лллллллллл  ллллллллллл"
+   COLOR 15
+   LOCATE 18, 8: PRINT "LIFE  "
+   LOCATE 19, 8: PRINT "POINTS"
+   LOCATE 20, 8: PRINT "AMMO  "
+   LOCATE 21, 8: PRINT "SHEILD"
+   LOCATE 22, 8: PRINT "BOMB  "
+   LOCATE 18, 20: PRINT "LIFE  "
+   LOCATE 19, 20: PRINT "POINTS"
+   LOCATE 20, 20: PRINT "AMMO  "
+   LOCATE 21, 20: PRINT "SHEILD"
+   LOCATE 22, 20: PRINT "BOMB  "
+
+   LOCATE 18, 13: PRINT USING "####"; L!(1)
+   LOCATE 19, 15: PRINT P%(1)
+   LOCATE 20, 15: PRINT PL%(1)
+   LOCATE 21, 15: PRINT SH%(1)
+   LOCATE 22, 15: PRINT B%(1)
+   LOCATE 18, 26: PRINT USING "####"; L!(0)
+   LOCATE 19, 28: PRINT P%(0)
+   LOCATE 20, 28: PRINT PL%(0)
+   LOCATE 21, 28: PRINT SH%(0)
+   LOCATE 22, 28: PRINT B%(0)
+   RETURN
+
+
+6020
+   IF PM% = 1 THEN 6021
+   IF PM% = 0 THEN 6022
+6021
+   IF K%(1, 1) >= 1 THEN PUT (8 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 350), PSET
+   IF K%(1, 2) >= 1 THEN PUT (9 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 351), PSET
+   IF K%(1, 3) >= 1 THEN PUT (10 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 352), PSET
+   IF K%(1, 4) >= 1 THEN PUT (11 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 353), PSET
+   IF K%(1, 5) >= 1 THEN PUT (12 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 354), PSET
+   IF K%(1, 6) >= 1 THEN PUT (13 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 355), PSET
+   IF K%(1, 7) >= 1 THEN PUT (8 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 356), PSET
+   IF K%(1, 8) >= 1 THEN PUT (9 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 357), PSET
+   IF K%(1, 9) >= 1 THEN PUT (10 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 358), PSET
+   IF K%(1, 10) >= 1 THEN PUT (11 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 359), PSET
+   IF K%(1, 11) >= 1 THEN PUT (12 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 360), PSET
+   IF K%(1, 12) >= 1 THEN PUT (13 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 361), PSET
+   RETURN
+6022
+   IF K%(0, 1) >= 1 THEN PUT (20 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 350), PSET
+   IF K%(0, 2) >= 1 THEN PUT (21 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 351), PSET
+   IF K%(0, 3) >= 1 THEN PUT (22 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 352), PSET
+   IF K%(0, 4) >= 1 THEN PUT (23 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 353), PSET
+   IF K%(0, 5) >= 1 THEN PUT (24 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 354), PSET
+   IF K%(0, 6) >= 1 THEN PUT (25 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 355), PSET
+   IF K%(0, 7) >= 1 THEN PUT (20 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 356), PSET
+   IF K%(0, 8) >= 1 THEN PUT (21 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 357), PSET
+   IF K%(0, 9) >= 1 THEN PUT (22 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 358), PSET
+   IF K%(0, 10) >= 1 THEN PUT (23 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 359), PSET
+   IF K%(0, 11) >= 1 THEN PUT (24 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 360), PSET
+   IF K%(0, 12) >= 1 THEN PUT (25 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 361), PSET
+   RETURN
+6030
+   IF PM% = 1 THEN 6031
+   IF PM% = 0 THEN 6032
+6031
+   IF K%(1, 1) = 0 THEN PUT (8 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 2) = 0 THEN PUT (9 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 3) = 0 THEN PUT (10 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 4) = 0 THEN PUT (11 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 5) = 0 THEN PUT (12 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 6) = 0 THEN PUT (13 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 7) = 0 THEN PUT (8 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 8) = 0 THEN PUT (9 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 9) = 0 THEN PUT (10 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 10) = 0 THEN PUT (11 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 11) = 0 THEN PUT (12 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(1, 12) = 0 THEN PUT (13 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   RETURN
+6032
+   IF K%(0, 1) = 0 THEN PUT (20 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 2) = 0 THEN PUT (21 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 3) = 0 THEN PUT (22 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 4) = 0 THEN PUT (23 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 5) = 0 THEN PUT (24 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 6) = 0 THEN PUT (25 * 8 - 8, 23 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 7) = 0 THEN PUT (20 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 8) = 0 THEN PUT (21 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 9) = 0 THEN PUT (22 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 10) = 0 THEN PUT (23 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 11) = 0 THEN PUT (24 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   IF K%(0, 12) = 0 THEN PUT (25 * 8 - 8, 24 * 8 - 8), SPRITES%(EPS% * 0), PSET
+   RETURN
+
+6040
+   IF MAP%(UD%(PM%), LR%(PM%)) = 362 THEN LET MW% = 1
+   IF MAP%(UD%(PM%), LR%(PM%)) = 363 THEN LET MW% = 2
+   IF MAP%(UD%(PM%), LR%(PM%)) = 364 THEN LET MW% = 3
+   IF MAP%(UD%(PM%), LR%(PM%)) = 365 THEN LET MW% = 4
+   IF MAP%(UD%(PM%), LR%(PM%)) = 366 THEN LET MW% = 5
+   IF MAP%(UD%(PM%), LR%(PM%)) = 367 THEN LET MW% = 6
+   IF MAP%(UD%(PM%), LR%(PM%)) = 368 THEN LET MW% = 7
+   IF MAP%(UD%(PM%), LR%(PM%)) = 369 THEN LET MW% = 8
+   IF PM% = 0 THEN PUT (21 * 8 - 8, 6 * 8 - 8), SPRITES%(EPS% * (361 + MW%)), PSET
+   IF PM% = 1 THEN PUT (8 * 8 - 8, 6 * 8 - 8), SPRITES%(EPS% * (361 + MW%)), PSET
+   IF HW%(PM%) = 0 THEN LET HW%(PM%) = MW%: MAP%(UD%(PM%), LR%(PM%)) = 0: RETURN
+   SWAP HW%(PM%), MW%
+   IF MW% = 1 THEN MAP%(UD%(PM%), LR%(PM%)) = 362: RETURN
+   IF MW% = 2 THEN MAP%(UD%(PM%), LR%(PM%)) = 363: RETURN
+   IF MW% = 3 THEN MAP%(UD%(PM%), LR%(PM%)) = 364: RETURN
+   IF MW% = 4 THEN MAP%(UD%(PM%), LR%(PM%)) = 365: RETURN
+   IF MW% = 5 THEN MAP%(UD%(PM%), LR%(PM%)) = 366: RETURN
+   IF MW% = 6 THEN MAP%(UD%(PM%), LR%(PM%)) = 367: RETURN
+   IF MW% = 7 THEN MAP%(UD%(PM%), LR%(PM%)) = 368: RETURN
+   IF MW% = 8 THEN MAP%(UD%(PM%), LR%(PM%)) = 369: RETURN
+
+6100
+   LET AN% = MAP%(UD%(PM%), LR%(PM%))
+   IF AN% >= 323 AND AN% <= 341 THEN RETURN
+
+   IF AN% = 315 THEN GOTO 6160
+   IF AN% = 317 THEN GOTO 6161
+   IF AN% = 319 THEN GOTO 6162
+   IF AN% = 321 THEN GOTO 6163
+
+   IF AN% >= 362 AND AN% <= 369 THEN GOTO 6040
+   IF AN% = 95 THEN RETURN
+   IF AN% = 124 THEN LET P%(PM%) = P%(PM%) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 125 THEN LET P%(PM%) = P%(PM%) + 5: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 420 THEN LET L!(PM%) = L!(PM%) - 10: MAP%(UD%(PM%), LR%(PM%)) = 0: IF L!(PM%) < 0 THEN LET L!(PM%) = 0: GOTO 6110
+   IF AN% = 383 THEN LET L!(PM%) = L!(PM%) - 5: IF L!(PM%) < 0 THEN LET L!(PM%) = 0: GOTO 6110
+   IF AN% = 384 THEN LET L!(PM%) = L!(PM%) - 5: MAP%(UD%(PM%), LR%(PM%)) = 0: IF L!(PM%) < 0 THEN LET L!(PM%) = 0: GOTO 6110
+   IF SH%(0) = 0 THEN IF AN% = 288 THEN LET L!(PM%) = L!(PM%) - 10: IF L!(PM%) < 0 THEN LET L!(PM%) = 0: GOTO 6110
+   IF SH%(1) = 0 THEN IF AN% = 288 THEN LET L!(PM%) = L!(PM%) - 10: IF L!(PM%) < 0 THEN LET L!(PM%) = 0: GOTO 6110
+   IF AN% = 260 THEN LET SH%(PM%) = SH%(PM%) + 200: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 160 THEN MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6120
+   IF AN% = 97 OR AN% = 99 THEN LET L!(PM%) = L!(PM%) - 5: LET LR%(PM%) = OLR%(PM%): LET UD%(PM%) = OUD%(PM%): GOTO 6110
+   IF AN% = 101 OR AN% = 103 THEN LET L!(PM%) = L!(PM%) - 5: LET LR%(PM%) = OLR%(PM%): LET UD%(PM%) = OUD%(PM%): GOTO 6110
+   IF AN% = 136 THEN LET L!(PM%) = L!(PM%) + 10: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 137 THEN LET L!(PM%) = L!(PM%) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 138 THEN LET L!(PM%) = L!(PM%) + 2: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 139 THEN LET L!(PM%) = L!(PM%) + 5: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 156 THEN LET L!(PM%) = L!(PM%) + 10: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 265 THEN LET L!(PM%) = L!(PM%) + 15: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 245 OR AN% = 250 THEN LET L!(PM%) = L!(PM%) + 20: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 51 THEN LET PL%(PM%) = PL%(PM%) + 10: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 53 THEN LET PL%(PM%) = PL%(PM%) + 5: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 370 THEN LET B%(PM%) = B%(PM%) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6110
+   IF AN% = 350 THEN LET K%(PM%, 1) = K%(PM%, 1) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 351 THEN LET K%(PM%, 2) = K%(PM%, 2) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 352 THEN LET K%(PM%, 3) = K%(PM%, 3) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 353 THEN LET K%(PM%, 4) = K%(PM%, 4) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 354 THEN LET K%(PM%, 5) = K%(PM%, 5) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 355 THEN LET K%(PM%, 6) = K%(PM%, 6) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 356 THEN LET K%(PM%, 7) = K%(PM%, 7) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 357 THEN LET K%(PM%, 8) = K%(PM%, 8) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 358 THEN LET K%(PM%, 9) = K%(PM%, 9) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 359 THEN LET K%(PM%, 10) = K%(PM%, 10) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 360 THEN LET K%(PM%, 11) = K%(PM%, 11) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 361 THEN LET K%(PM%, 12) = K%(PM%, 12) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 55 THEN LET K%(PM%, 13) = K%(PM%, 13) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 57 THEN LET K%(PM%, 14) = K%(PM%, 14) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 59 THEN LET K%(PM%, 15) = K%(PM%, 15) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 61 THEN LET K%(PM%, 16) = K%(PM%, 16) + 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 140 THEN LET K%(PM%, 17) = 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 144 THEN LET K%(PM%, 18) = 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 148 THEN LET K%(PM%, 19) = 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6020
+   IF AN% = 385 AND K%(PM%, 1) >= 1 THEN LET K%(PM%, 1) = K%(PM%, 1) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 386 AND K%(PM%, 2) >= 1 THEN LET K%(PM%, 2) = K%(PM%, 2) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 387 AND K%(PM%, 3) >= 1 THEN LET K%(PM%, 3) = K%(PM%, 3) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 388 AND K%(PM%, 4) >= 1 THEN LET K%(PM%, 4) = K%(PM%, 4) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 389 AND K%(PM%, 5) >= 1 THEN LET K%(PM%, 5) = K%(PM%, 5) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 390 AND K%(PM%, 6) >= 1 THEN LET K%(PM%, 6) = K%(PM%, 6) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 391 AND K%(PM%, 7) >= 1 THEN LET K%(PM%, 7) = K%(PM%, 7) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 392 AND K%(PM%, 8) >= 1 THEN LET K%(PM%, 8) = K%(PM%, 8) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 393 AND K%(PM%, 9) >= 1 THEN LET K%(PM%, 9) = K%(PM%, 9) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 394 AND K%(PM%, 10) >= 1 THEN LET K%(PM%, 10) = K%(PM%, 10) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 395 AND K%(PM%, 11) >= 1 THEN LET K%(PM%, 11) = K%(PM%, 11) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 396 AND K%(PM%, 12) >= 1 THEN LET K%(PM%, 12) = K%(PM%, 12) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 83 AND K%(PM%, 13) >= 1 THEN LET K%(PM%, 13) = K%(PM%, 13) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 85 AND K%(PM%, 14) >= 1 THEN LET K%(PM%, 14) = K%(PM%, 14) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 87 AND K%(PM%, 15) >= 1 THEN LET K%(PM%, 15) = K%(PM%, 15) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 89 AND K%(PM%, 16) >= 1 THEN LET K%(PM%, 16) = K%(PM%, 16) - 1: MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 175 AND K%(PM%, 17) = 1 THEN MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 179 AND K%(PM%, 18) = 1 THEN MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF AN% = 183 AND K%(PM%, 19) = 1 THEN MAP%(UD%(PM%), LR%(PM%)) = 0: GOTO 6030
+   IF PM% = 0 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D0% = 3 AND MAP%(UD%(0) - 1, LR%(0)) = 0 THEN LET MAP%(UD%(0) - 1, LR%(0)) = AN%: MAP%(UD%(0), LR%(0)) = 0: GOTO 6030
+   IF PM% = 0 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D0% = 2 AND MAP%(UD%(0) + 1, LR%(0)) = 0 THEN LET MAP%(UD%(0) + 1, LR%(0)) = AN%: MAP%(UD%(0), LR%(0)) = 0: GOTO 6030
+   IF PM% = 0 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D0% = 0 AND MAP%(UD%(0), LR%(0) - 1) = 0 THEN LET MAP%(UD%(0), LR%(0) - 1) = AN%: MAP%(UD%(0), LR%(0)) = 0: GOTO 6030
+   IF PM% = 0 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D0% = 1 AND MAP%(UD%(0), LR%(0) + 1) = 0 THEN LET MAP%(UD%(0), LR%(0) + 1) = AN%: MAP%(UD%(0), LR%(0)) = 0: GOTO 6030
+   IF PM% = 1 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D1% = 3 AND MAP%(UD%(1) - 1, LR%(1)) = 0 THEN LET MAP%(UD%(1) - 1, LR%(1)) = AN%: MAP%(UD%(1), LR%(1)) = 0: GOTO 6030
+   IF PM% = 1 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D1% = 2 AND MAP%(UD%(1) + 1, LR%(1)) = 0 THEN LET MAP%(UD%(1) + 1, LR%(1)) = AN%: MAP%(UD%(1), LR%(1)) = 0: GOTO 6030
+   IF PM% = 1 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D1% = 0 AND MAP%(UD%(1), LR%(1) - 1) = 0 THEN LET MAP%(UD%(1), LR%(1) - 1) = AN%: MAP%(UD%(1), LR%(1)) = 0: GOTO 6030
+   IF PM% = 1 THEN IF AN% >= 407 AND AN% <= 413 THEN IF D1% = 1 AND MAP%(UD%(1), LR%(1) + 1) = 0 THEN LET MAP%(UD%(1), LR%(1) + 1) = AN%: MAP%(UD%(1), LR%(1)) = 0: GOTO 6030
+   IF PM% = 0 AND AN% = 237 THEN LET GUN%(0) = 1: MAP%(UD%(0), LR%(0)) = 0: PUT (20 * 8 - 8, 6 * 8 - 8), SPRITES%(EPS% * 237), PSET: RETURN
+   IF PM% = 1 AND AN% = 237 THEN LET GUN%(1) = 1: MAP%(UD%(1), LR%(1)) = 0: PUT (7 * 8 - 8, 6 * 8 - 8), SPRITES%(EPS% * 237), PSET: RETURN
+   IF AN% = 423 THEN LET EN% = 1: RETURN
+   LET LR%(PM%) = OLR%(PM%): LET UD%(PM%) = OUD%(PM%)
+   RETURN
+6110
+   LOCATE 18, 13: PRINT USING "####"; L!(1)
+   LOCATE 19, 15: PRINT P%(1)
+   LOCATE 20, 15: PRINT PL%(1)
+   LOCATE 21, 15: PRINT SH%(1)
+   LOCATE 22, 15: PRINT B%(1)
+   LOCATE 18, 26: PRINT USING "####"; L!(0)
+   LOCATE 19, 28: PRINT P%(0)
+   LOCATE 20, 28: PRINT PL%(0)
+   LOCATE 21, 28: PRINT SH%(0)
+   LOCATE 22, 28: PRINT B%(0)
+   RETURN
+
+6120
+   LET SH%(PM%) = SH%(PM%) + 1000
+   LET L!(PM%) = L!(PM%) + 100
+   LET PL%(PM%) = PL%(PM%) + 200
+   LET B%(PM%) = B%(PM%) + 3
+   RETURN
+
+6160
+   FOR ZZ% = 0 TO 50
+	IF G1UD%(ZZ%) > 0 THEN MAP%(G1UD%(ZZ%), G1LR%(ZZ%)) = 63
+   NEXT ZZ%
+   RETURN
+6161
+   FOR ZZ% = 0 TO 50
+	IF G2UD%(ZZ%) > 0 THEN MAP%(G2UD%(ZZ%), G2LR%(ZZ%)) = 63
+   NEXT ZZ%
+   RETURN
+6162
+   FOR ZZ% = 0 TO 50
+	IF G3UD%(ZZ%) > 0 THEN MAP%(G3UD%(ZZ%), G3LR%(ZZ%)) = 63
+   NEXT ZZ%
+   RETURN
+6163
+   FOR ZZ% = 0 TO 50
+	IF G4UD%(ZZ%) > 0 THEN MAP%(G4UD%(ZZ%), G4LR%(ZZ%)) = 63
+   NEXT ZZ%
+   RETURN
+
+INTRO:
+   LET C% = 16
+   LET LR%(0) = 0
+   LET UD%(0) = 0
+   LET LR%(1) = 320
+   LET UD%(1) = 200
+   DO
+	LINE (LR%(0), UD%(0))-(LR%(1), UD%(1)), C%, BF
+	LET LR%(0) = LR%(0) + 1
+	LET UD%(0) = UD%(0) + 1
+	LET LR%(1) = LR%(1) - 1
+	LET UD%(1) = UD%(1) - 1
+	LET C% = C% + 1
+	IF LR%(0) = LR%(1) THEN LET R% = 1
+	FOR ZX% = 0 TO C% * 150: NEXT ZX%
+   LOOP UNTIL R% = 1
+
+   PUT (16 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 715), PSET
+   PUT (17 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 714), PSET
+   PUT (18 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 722), PSET
+   PUT (19 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 704), PSET
+   PUT (20 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 717), PSET
+   PUT (21 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 704), PSET
+   PUT (22 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 711), PSET
+   PUT (23 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 705), PSET
+   PUT (24 * 8 - 8, 10 * 8 - 8), SPRITES(EPS% * 718), PSET
+
+   PUT (18 * 8 - 8, 1 * 8 - 8), SPRITES(EPS% * 721), PSET
+   COLOR 10
+   LOCATE 1, 19: PRINT "2.1"
+   COLOR 15
+
+   DO
+   LOOP UNTIL INKEY$ <> ""
+   CLS
+   RETURN
+

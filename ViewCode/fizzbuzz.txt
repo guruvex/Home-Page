@@ -1,0 +1,34 @@
+/*
+---------------------------------------------------------------
+| simple coding execrise to find numbers divisable by 3 and 5 |
+| or both 3 and 5					      |
+| this is knows as an algorithm	 	 	 	      |
+|							      |
+| created 11/2017 by james heath			      |
+|							      |
+---------------------------------------------------------------
+*/
+
+#include <iostream>
+using namespace std;
+
+int main (){
+
+int x = 0;
+int y = 0;
+bool z = (false);
+
+	do{
+		x++;
+		if (x % 3 == 0){cout << "fizz"; z = (true);}
+		if (x % 5 == 0){cout << "buzz"; z = (true);}
+		if (z == (false)){cout << x;}
+		else {z = (false);}
+		cout << endl;
+	} 
+	while (x < 100);
+	
+	
+return 0;
+}
+
