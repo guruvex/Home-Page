@@ -1,0 +1,119 @@
+/* this css file is to take place of the 2 other
+   css files and all the extra stuff thats been
+   added to the header over time 
+   
+   written by GuruVex 11/8/2018 */
+   
+/* nav bar start */   
+#nav {
+    width: 100%;
+    float: left;
+    margin: 0 0 3em 0;
+    padding: 0;
+    list-style: none;
+    background-color: #000000;
+    border-bottom: 1px solid #ccc; 
+    border-top: 1px solid #ccc; 
+}
+#nav li {
+    float: left; 
+}
+#nav li a {
+    display: block;
+    padding: 8px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #7cfc00;
+    border-right: 1px solid #ccc; 
+}
+#nav li a:hover {
+    color: #c00;
+    background-color: #fff; 
+}
+/* nav bar end */
+
+/* portfolio entrys */    
+.entry p {float: left;}
+.entry img {float: right;}
+.entry a {float:left;}
+.entry h3 {float: left;}
+.contact h1 {float: right;}
+.contact p {float: right;}
+.contact a {float: right;}
+
+/* cert pic size */
+.picturesize {
+	width: 460px; 
+	height: 345px;
+}
+
+/* setting items under the left right or both */                
+.clearleft {clear:left;}
+.clearfix {clear: both;}
+.clearright {clear:right;}
+
+/* page body color */
+.body_portfolio { 
+    background-color: #E6EBF9;
+	padding-top: 54px;
+	padding-top: 56px;
+}
+
+.pagination {
+  margin-bottom: 15px;
+}
+
+.body_main_page {
+    background-color: #000000;
+    color: #ffffff
+    }
+/* tabbing of items */        
+.tab1 {padding-left: 2em;}
+.tab2 {padding-left: 3em;}
+.tab3 {padding-left: 4em;}
+
+/* main page */
+.mybanner {		
+	font-family: 'Gugi', cursive;
+	text-shadow: 4px 4px 4px #aaa;
+}	
+.myparagraph {
+	font-family: 'Lora', serif;
+}
+.p1 {
+	font-family: 'Lora', serif;
+	color: #55e95c;
+}
+table {
+    	border-collapse: collapse;
+    	border: 1px solid #8de6a0;
+	border-radius: 5px;
+    	padding-top: 10px;
+    	padding-right: 300px;
+    	padding-bottom: 10px;
+    	padding-left: 30px;
+}
+.div1 {
+    	border: 1px solid #8de6a0;
+	border-radius: 5px;
+    	padding-top: 10px;
+    	padding-right: 300px;
+    	padding-bottom: 10px;
+    	padding-left: 30px;
+	margin: 0 auto; 
+	width: 130px;
+}
+
+/* dev tools page */
+.p_dev {font-family: 'Lora', serif;}
+.mybanner_dev_tools {		
+font-family: 'Oswald', cursive;
+text-shadow: 4px 4px 4px #aaa;
+}
+
+.go_right {
+    float: right;
+}
+.go_left {
+    float: left;
+}

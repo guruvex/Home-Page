@@ -1,351 +1,362 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<!-- name in the browser window tab -->
-		<title>
-			James Heath's Programming Projects
-		</title>
-		<!-- link to css file -->
-		<link rel="stylesheet" type="text/css" href="nav.css">. 
-	
-		<!-- new css testing happens here -->
-		<style>
-		.entry p {float: left;}
-		.entry img {float: right;}
-		.entry a {float:left;}
-		.entry h3 {float: left;}
-		
-		.contact h1 {float: right;}
-		.contact p {float: right;}
-		.contact a {float: right;}
-		
-		.clearleft {clear:left;}
-		.clearfix {clear: both;}
-		.clearright {clear:right;}
-		</style>
-	
-	</head>
-	<body>
-		<!-- return to main site -->
-		<a href="index.html"><button>Home Page</button></a>
-		<a href="training.html"><button>Training</button></a>
-		<div style = "float: right;">
-			<h1>Contact me</h1>
-			<p>
-			James Heath<br>
-			JamesHeath.work@gmail.com<br>
-			<a href="https://www.linkedin.com/in/james-heath-71a58665/" target="_blank">LinkedIn Profile</a>
-			</p>
-		</div>
-		
-		<!-- start here -->
-		<div class="entry">
-			<div float:left;>
-				<h3> About me </h3>
-			</div>
-			<div class="clearleft"></div>
-			<p>		
-				I been programming as a hobby starting in the mid 90's. I have tried out different languages over the years.<br> 
-				I have worked with BASIC (both VB6 and VB.NET), C++, JAVA, HTML, CSS, JavaScript, JQuery, and XML. I have listed some of my personal projects here.<br>
-				The two things i like the most is building programs and overcoming challenges, programming gives me both,<br>
-				so I am trying to make programming my full time career.
-			</p>
-		</div>
-		<div class="clearfix"></div>
-		<hr>
-		<!-- next entry -->
-		<p>
-		The first project on my list is this page, I built it from scratch using HTML5 and CSS<br>
-		</p>
-				<!-- this will put the next item under the left item on the page -->
-		<div class="clearleft"></div>
-		<hr>
-		<!-- Explore space -->
-		<div class = "entry">
-				<h3>Educational android App</h3>
-				<div class="clearleft"></div>
-				<a  target="_blank" href="https://play.google.com/store/apps/details?id=com.idlehex66gmail.explorespace"><button>See it on the Play store</button></a>
-				<div class="clearleft"></div>
-				<p>
-					Date finished 10/2018 using Java, XML in android studio<br>
-					I used one of the project app as a base and built on to it. I expanded its data set and added some<br>
-					features. This program uses a list view and a view adapter on a tabbed layout using fragments. All the<br>
-					items go to the same activity intent and that activity changes how its laid out depending on whats passed to it.<br>
-				</p>
-				<div class="clearfix"></div>
-			</div>
-		<hr>
-		<!-- Invintory app -->
-		<div class = "entry">
-			<img src="images/book_keeper.png">
-			<h3>Invintory (book keeping) android App</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/BookKeeper"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 9/2018 using Java, XML in android studio<br>
-				This project app for Udacity's course it teaches how to use SQLlite database to quire data, insert new data or update data in a data base. This app has a sale button on each<br>
-				item that will update the screen and data base each time a item is sold. It also uses a background loader so the database loading wont hang the user interface. When a item<br>
-				is touched it will take the user to a new screen to edit the details of the item in the data base. The user can also add new items to the data base with the options menu in<br>
-				the top activity bar. 
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>	
-		<!-- News reader app -->
-		<div class = "entry">
-			<h3>News reader android App</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/NewsApp2"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 8/2018 using Java, XML in android studio<br>
-				This project app for Udacity's course is to practice working with data over the internet. I uses guardian news API to request news story's that the user
-				requests. Sports, weather and so on. It receives this as a JSON object and parses the desired information from it to populate the screen. Each news item
-				will open the correct story in the users favorite browser.<br>
-				This app uses multi threads to allow it to wait for the JSON object to come over the network and not freeze the UI to give a better user experience. 
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>	
-		<!-- Tour Guide app -->
-		<div class = "entry">
-			<img src="images/tour_guide_1.png">
-			<img src="images/tour_guide.png">
-			<h3>Tour Guide android App</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/TourGuide"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 7/2018 using Java, XML in android studio<br>
-				This project app for Udacity's course is to better understand how to use the view adapter class, this project I picked space, because there's a<br>
-				lot of cool things out there to see. Each item on the list will take you to the details page, this required sending other data with the intent<br>
-				so the new activity can pull the right information from the array of planets stored.
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>	
-		<!-- MiWok language app -->
-		<div class = "entry">
-			<img src="images/miwok.png">
-			<h3>MiWok android App</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/miwok"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 5/2018 using Java, XML in android studio<br>
-				This was a project for Udacity's android course. It's an app to teach users the MiWok language, it has tabs that group the category together. Colors,<br>
-				numbers, and so on. Its build with a list so items can be added or removed very simply. It also plays audio for each item when clicked on. 
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>	
-				<!-- easy fill master app -->
-		<div class = "entry">
-			<img src="images/masterapp.jpg">
-			<h3>Easyfill Master App</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/EasyFill"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 3/2018 using HTML & JavaScript<br>
-				When filling out a lot of information box's that requests the same information. I was highlighting, then copy/paste the information from a text doc.<br>
-				This got tedious and the random missing of a letter at the start or end started getting annoying, so I built this Web App to handle the copy for me.<br>
-				when the button is clicked it will fill the a box with the right information, then copy this to the clipboard ready to paste where ever I need it.<br>
-				I can also pull the browser tab out to its own window allowing it to act like its own app. I choose to build this in HTML because the browser will<br>
-				handle all the UI for me, speeding up the development process.
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>		
-		
-		<div class = "entry">
-			<!-- <img src="images/udacitycard.jpg"> -->
-			<h3>Quiz App</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/QuizAppOne"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 3/2018 using Android Studio, Java & XML<br>
-				Grow with Google challenge project, Quiz App is a project to learn more about how to code in java and design options for the screen layouts.<br>
-				This app is also is required to keep its information when the screen rotates. It will takes typed answers, checkbox answers and radio button choices. <br>
-				This was my first run through of building this kind of app and I am building a better one.<br>				
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>			
-		
-		<div class = "entry">
-			<!-- <img src="images/udacitycard.jpg"> -->
-			<h3>Just Java App</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/justjava"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 2/2018 using Android Studio, Java & XML<br>
-				Grow with Google challenge project, just java app is more complex than the udacity card app. This app will take the number of coffee's and calculate<br>
-				the price. This app also lets the user choose to add chocolate or whipped cream topping and the total will change based on the users choices.<br>
-				The app also will send this info through the phones email using intents with the android framework so the users favorite email app. <br>				
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>			
-		<div class = "entry">
-			<img src="images/udacitycard.jpg">
-			<h3>Android card project</h3>
-			<div class="clearleft"></div>
-			<a  target="_blank" href="https://github.com/guruvex/UdacityCard"><button>See it on GitHub</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 1/2018 using Android Studio, Java & XML<br>
-				one of the first Grow with Google challange projects. It's a one page app that displays a Udacity image and some required info. <br>
-				The image choice and design is student choice.<br>
-				I made the phone number and web link clickable to link to the phone call app and the default browser respectively.<br>
-				I didn't like the default app name in the title bar so i changed that to its current Udacity Card title.
-			</p>
-			<div class="clearfix"></div>
-		</div>
-		<hr>			
-			<!-- add C++ programs to talk about -->
-		
-		<div class = "entry">
-			<img src="images/fizzbuzzout.jpg">
-			<h3>FizzBuzz</h3>
-			<div class="clearleft"></div>
-			<a href="/code/fizzbuzz.cpp" download="/code/fizzbuzz.cpp"><button>Download the code</button></a>
-			<a href="/viewcode/fizzbuzz.txt" download="/viewcode/fizzbuzz.txt"><button>View the code in plain text</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 11/2017 using C++<br> 
-				Easy code challenge, the hardest part was trying to decide the best way to print the fizz and buzz correctly.<br>
-				This is the smallest code i could think of to do the job.
-			</p>
-			<div class="clearfix"></div>
-			<pre>
-	x++;
-	if (x % 3 == 0){cout << "fizz"; z = (true);}
-	if (x % 5 == 0){cout << "buzz"; z = (true);}
-	if (z == (false)){cout << x;}
-	else {z = (false);}
-	cout << endl;
-			</pre>
-		</div>
-		<hr>
-		
-				<!-- next program -->
-		<div class="entry">
-			<img src="images/ttt.jpg">
-			<h3>TicTacTow</h3>
-			<div class="clearleft"></div>
-			<a href="/code/tictactow.cpp" download="/code/tictactow.cpp"><button>Download the code</button></a>
-			<a href="/viewcode/tictactow.txt" download="/viewcode/tictactow.txt"><button>View the code in plain text</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 11/2017 using C++<br> 
-				This was a bit more challenging, I first built it with an array and the compiler would put random things to the last array variable. <br> 
-				Such as random ASCII character, or it would add (x,o) to that variable. <br>
-				I realized the array wasn't doing anything for the program, so I removed it and fixed the issue.
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-				<!-- add java program -->
-		<div class="entry">
-			<img src="images/textbasedgame.jpg">
-			<h3>Text Maze</h3>
-			<div class="clearleft"></div>
-			<a href="/code/textbasedgame.java" download="/code/textbasedgame.java"><button>Download the code</button></a>
-			<a href="/viewcode/textbasedgame.txt" download="/viewcode/textbasedgame.txt"><button>View the code in plain text</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 6/2017 using JAVA<br> 
-				I wanted to learn something new, so I tried my hand at JAVA. This was the first program I made.<br>
-				This game has an easy to change map, and a couple types of area you can walk on such as grass and pebbles. <br>
-				I also built a combat system with a random win/lose, and the monster would be removed after you defeat it.<br>
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>James Heath's Programming Projects</title>
 
-		<!-- comment line -->
-		<div class="entry">
-			<div float:left;>
-				<h3>Quick Basic and Why I included this</h3>
-			</div>
-			<div class="clearleft"></div>
-			<p>
-				I included my work in quick basic because it shows what I could do with limited resources.
-				I didn't have internet at home. <br> The nearest internet was 15 miles away at the public library. 
-				Downloading wasn't allowed, so I would find QBasic pages <br> and write down code. Then see if I could 
-				get it to work at home. I did this for a few years and made some really cool stuff.
-			</p>
-			<div class="clearleft"></div>
-			<hr>
-		</div>
-		
-		<!-- first program -->
-		<div class="entry">
-			<img src="images/shooter1.jpg">
-			<img src="images/shooter.jpg">
-			<h3>Shooter</h3>
-			<div class="clearleft"></div>
-			<a href="/code/shooter.bas" download="/code/shooter.bas"><button>Download the code</button></a>
-			<a href="/viewcode/shooter.txt" download="/viewcode/shooter.txt"><button>View the code in plain text</button></a>
-			<div class="clearleft"></div>		
-			<p>
-				Date finished 1997 using QuickBasic<br> 
-				This was one of my first artificial intelligence programs. It has a player on the left and right of the <br>
-				screen. One of the players can be human or computer player, so you can play with a friend or solo. <br>
-				The center blocks move up and down and will block shoots. I added this to put some fun dynamic <br>
-				to the game. <br>
-				The hard part was balancing the artificial intelligence so that it can be hit but not to easy. I also <br>
-				figured out a way for it to try and hit the human player so the human player can't just sit in one spot. 
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-		
-		<!-- 2nd program -->
-		<div class ="entry">
-			<img src="images/my3D.jpg">
-			<h3>3D Maze</h3>
-			<div class="clearleft"></div>
-			<a href="/code/my3D.bas" download="/code/my3D.bas"><button>Download the code</button></a>
-			<a href="/viewcode/my3D.txt" download="/viewcode/my3D.txt"><button>View the code in plain text</button></a>
-			<div class="clearleft"></div>
-			<p>
-				Date finished 1998 using QuickBasic<br>
-				I built this program to push the limits of what i could do with QuickBasic.<br>
-				It was really challenging and due to only having a 486 computer it didn't run very fast. <br>
-				Some of the things I did differently was to use a read/data to load array tables,<br>
-				and sine/cosine for the math to draw the walls properly.
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-		
-		<!-- 3nd program -->
-		<div class="entry">
-			<img src="images/pelf1.jpg">
-			<img src="images/pelf3.jpg">
-			<h3>Power elf</h3>
-			<div class="clearleft"></div>
-			<a href="/code/pelf.7z" download="/code/pelf.7z"><button>Download the code</button></a>
-			<a href="/viewcode/pelf.txt" download="/viewcode/pelf.txt"><button>View the code in plain text</button></a>
-			<p>
-				Date finished 1998 using QuickBasic<br>
-				This program was months in the making. It has 2 players and was built around a race to the finish.<br>
-				It has many features such as hand to hand weapon, ranged weapon and bombs that can be placed. <br> 
-				There are many types of keys and doors. Teleporters breakable and pushable walls and the graphics  <br> animate.<br>
-				When a player dies he is sent to a level specific waiting area until next round. There's also 2 types<br>
-				of artificial intelligence built in to the game. One fallows a path and the other will search <br> the maze
-				for the players.<br> 
-				<br>
-				I overcome many problems building this program from complex arrays to condensing code to fit more<br>
-				features in to the 640k memory limit of QuickBasic. Building a smart maze running artificial intelligence<br>
-				that wont get stuck. Loading levels from files and parsing the infomation to find key points on the map.<br>
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="guruvex.css" rel="stylesheet">
+
+  </head>
+  <body class="body_portfolio">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home Page
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="portfolio.html">Portfolio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="training.html">Training</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="android.html">Android</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="quickbasic.html">QuickBasic</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="devtools.html">My Dev Tools</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+      <!-- Page Heading -->
+      <div class="tab3">
+        <h5 class="my-4">
+          <!-- contact on right side-->
+          <div class="go_right">
+            <h2>Contact me</h2>
+              <small>                
+                <p>
+                James Heath<br>
+                JamesHeath.work@gmail.com<br>
+                <a href="https://www.linkedin.com/in/james-heath-71a58665/" target="_blank">LinkedIn Profile</a>
+              </p>
+            </small>
+          </div>
+        </h5>
+      </div>
+      <!-- about me on left side-->
+      <div class="entry">
+			  <div class="go_left">
+				  <h3> About me </h3>
+			  </div>
+			  <div class="clearleft"></div>
+			  <small>	
+				   I been programming as a hobby starting in the mid 90's. I have tried out different languages over the years.
+				   I have worked with BASIC (both VB6 and VB.NET), C++, JAVA, HTML, CSS, JavaScript, JQuery, and XML. I have listed some of my personal projects here.
+				   The two things i like the most is building things and overcoming challenges, programming gives me both,
+			    so I am trying to make programming my full time career.
+			  </small>
+		  </div>
+		  <div class="clearfix"></div>
+		  <hr>
+      </h5>
+      <!-- Project #14 -->
+      <div class="row">
+        <div class="col-md-12">
+          <h3>Educational android App</h3>
+          <p>Date finished 10/2018 using Java, XML in android studio<br>
+            I used one of the project app as a base and built on to it. I expanded its data set and added some
+            features. This program uses a list view and a view adapter on a tabbed layout using fragments. All the
+            items go to the same activity intent and that activity changes how its laid out depending on whats passed to it.
+          </p>
+          <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.idlehex66gmail.explorespace">View On Play Store</a>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #13 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3>Invintory (book keeping) android App</h3>
+          <p>Date finished 9/2018 using Java, XML in android studio<br>
+            This project app for Udacity's course it teaches how to use SQLlite database to quire data, insert new data or update data in a data base. This app has a sale button on each
+            item that will update the screen and data base each time a item is sold. It also uses a background loader so the database loading wont hang the user interface. When a item
+            is touched it will take the user to a new screen to edit the details of the item in the data base. The user can also add new items to the data base with the options menu in
+            the top activity bar.
+          </p>
+          <a class="btn btn-primary" href="https://github.com/guruvex/BookKeeper">See it on GitHub</a>
+        </div>
+        <div class="col-md-7">
+            <div class="go_right">
+              <img class="img-fluid rounded mb-3 mb-md-0" src="images/book_keeper.png" alt="">
+            </div>
+          </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #12 -->
+      <div class="row">
+        <div class="col-md-12">
+          <h3>News reader android App</h3>
+          <p>Date finished 8/2018 using Java, XML in android studio<br>
+            This project app for Udacity's course is to practice working with data over the internet. I uses guardian news API to request news story's that the user
+            requests. Sports, weather and so on. It receives this as a JSON object and parses the desired information from it to populate the screen. Each news item
+            will open the correct story in the users favorite browser.
+            This app uses multi threads to allow it to wait for the JSON object to come over the network and not freeze the UI to give a better user experience. 
+          </p>
+          <a class="btn btn-primary" href="https://github.com/guruvex/NewsApp2">See it on GitHub</a>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #11 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3>Tour Guide android App</h3>
+          <p>Date finished 7/2018 using Java, XML in android studio<br>
+            This project app for Udacity's course is to better understand how to use the view adapter class, this project I picked space, because there's a
+            lot of cool things out there to see. Each item on the list will take you to the details page, this required sending other data with the intent
+            so the new activity can pull the right information from the array of planets stored.
+          </p>
+          <a class="btn btn-primary" href="https://github.com/guruvex/TourGuide">See it on GitHub</a>
+        </div>
+        <div class="col-md-7">
+          <div class="go_right">
+              <img class="img-fluid rounded mb-3 mb-md-0" src="images/tour_guide_1.png" alt="">
+              <img class="img-fluid rounded mb-3 mb-md-0" src="images/tour_guide.png" alt="">
+            </div>
+          </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #10 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3>MiWok android App</h3>
+          <p>Date finished 5/2018 using Java, XML in android studio<br>
+				     This was a project for Udacity's android course. It's an app to teach users the MiWok language, it has tabs that group the category together. Colors,
+				     numbers, and so on. Its build with a list so items can be added or removed very simply. It also plays audio for each item when clicked on. 
+          </p>
+          <a class="btn btn-primary" href="https://github.com/guruvex/miwok">See it on GitHub</a>
+        </div>
+        <div class="col-md-7">
+          <div class="go_right">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/miwok.png" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #9 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3>Easyfill Master App</h3>
+          <p>Date finished 3/2018 using HTML & JavaScript<br>
+				     When filling out a lot of information box's that requests the same information. I was highlighting, then copy/paste the information from a text doc.
+				     This got tedious and the random missing of a letter at the start or end started getting annoying, so I built this Web App to handle the copy for me.
+				     when the button is clicked it will fill the a box with the right information, then copy this to the clipboard ready to paste where ever I need it.
+				     I can also pull the browser tab out to its own window allowing it to act like its own app. I choose to build this in HTML because the browser will
+				     handle all the UI for me, speeding up the development process.
+          </p>
+          <a class="btn btn-primary" href="https://github.com/guruvex/EasyFill">See it on GitHub</a>
+        </div>
+        <div class="col-md-7">
+          <div class="go_right">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/masterapp.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #8 -->
+      <div class="row">
+        <div class="col-md-12">
+          <h3>Quiz App</h3>
+          <p>Date finished 3/2018 using Android Studio, Java & XML<br>
+				     Grow with Google challenge project, Quiz App is a project to learn more about how to code in java and design options for the screen layouts.
+				     This app is also is required to keep its information when the screen rotates. It will takes typed answers, checkbox answers and radio button choices.
+				     This was my first run through of building this kind of app and I am building a better one.
+          </p>
+          <a class="btn btn-primary" href="https://github.com/guruvex/QuizAppOne">See it on GitHub</a>
+        </div>
+        <!-- need image in here-->
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #7 -->
+      <div class="row">
+        <div class="col-md-12">
+          <h3>Just Java App</h3>
+          <p>
+            Date finished 2/2018 using Android Studio, Java & XML<br>
+				    Grow with Google challenge project, just java app is more complex than the udacity card app. This app will take the number of coffee's and calculate
+				    the price. This app also lets the user choose to add chocolate or whipped cream topping and the total will change based on the users choices.
+				    The app also will send this info through the phones email using intents with the android framework so the users favorite email app.
+          </p>
+            <a class="btn btn-primary" href="https://github.com/guruvex/justjava">See it on GitHub</a>
+          </div>
+          <!-- need image in here-->
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #6 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3>FizzBuzz</h3>
+          <p>
+            Date finished 11/2017 using C++<br> 
+            Easy code challenge, the hardest part was trying to decide the best way to print the fizz and buzz correctly.<br>
+            This is the smallest code i could think of to do the job.
+          </p>
+          <a class="btn btn-primary" href="/viewcode/fizzbuzz.txt">View the code in plain text</a>
+        </div>
+        <div class="col-md-7">
+          <div class="go_right">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/fizzbuzzout.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #5 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3>TicTacTow</h3>
+          <p>
+            Date finished 11/2017 using C++<br> 
+            This was a bit more challenging, I first built it with an array and the compiler would put random things to the 
+            last array variable. Such as random ASCII character, or it would add (x,o) to that variable.
+				    I realized the array wasn't doing anything for the program, so I removed it and fixed the issue.
+          </p>
+          <a class="btn btn-primary" href="/viewcode/tictactow.txt">View the code in plain text</a>
+        </div>
+        <div class="col-md-7">
+          <div class="go_right">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/ttt.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #4 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3>Text Maze</h3>
+          <p>
+            Date finished 6/2017 using JAVA<br> 
+				    I wanted to learn something new, so I tried my hand at JAVA. This was the first program I made.<br>
+				    This game has an easy to change map, and a couple types of area you can walk on such as grass and pebbles. <br>
+				    I also built a combat system with a random win/lose, and the monster would be removed after you defeat it.<br>
+          </p>
+          <a class="btn btn-primary" href="/viewcode/textbasedgame.txt">View the code in plain text</a>
+        </div>
+        <div class="col-md-7">
+          <div class="go_right">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/textbasedgame.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #3 -->
+      <div class="row">
+        <div class="col-md-4">
+          <h3>Shooter</h3>
+          <p>
+            Date finished 1997 using QuickBasic<br> 
+            This was one of my first artificial intelligence programs. It has a player on the left and right of the
+            screen. One of the players can be human or computer player, so you can play with a friend or solo.
+            The center blocks move up and down and will block shoots. I added this to put some fun dynamic
+            to the game.
+            The hard part was balancing the artificial intelligence so that it can be hit but not to easy. I also
+            figured out a way for it to try and hit the human player so the human player can't just sit in one spot. 
+          </p>
+          <a class="btn btn-primary" href="/viewcode/shooter.txt">View the code in plain text</a>
+        </div>
+        <div class="col-md-8">
+          <div class="go_right">            
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/shooter1.jpg" alt="">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/shooter.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #2 -->
+      <div class="row">
+        <div class="col-md-4">
+          <h3>3D Maze</h3>
+          <p>
+            Date finished 1998 using QuickBasic<br>
+				    I built this program to push the limits of what i could do with QuickBasic.<br>
+				    It was really challenging and due to only having a 486 computer it didn't run very fast. <br>
+				    Some of the things I did differently was to use a read/data to load array tables,<br>
+				    and sine/cosine for the math to draw the walls properly. 
+          </p>
+          <a class="btn btn-primary" href="/viewcode/my3D.txt">View the code in plain text</a>
+        </div>
+        <div class="col-md-8">
+          <div class="go_right">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/my3D.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+      <!-- Project #1 -->
+      <div class="row">
+        <div class="col-md-4">
+          <h3>Power elf</h3>
+          <p>
+            Date finished 1998 using QuickBasic<br>
+            This program was months in the making. It has 2 players and was built around a race to the finish.
+            It has many features such as hand to hand weapon, ranged weapon and bombs that can be placed. 
+            There are many types of keys and doors. Teleporters breakable and pushable walls and the graphics animate. <br>
+            When a player dies he is sent to a level specific waiting area until next round. There's also 2 types
+            of artificial intelligence built in to the game. One fallows a path and the other will search the maze
+            for the players.<br>
+            I overcome many problems building this program from complex arrays to condensing code to fit more
+            features in to the 640k memory limit of QuickBasic. Building a smart maze running artificial intelligence
+            that wont get stuck. Loading levels from files and parsing the infomation to find key points on the map.
+          </p>
+          <a class="btn btn-primary" href="/viewcode/pelf.txt">View the code in plain text</a>
+        </div>
+        <div class="col-md-8">
+          <div class="go_right">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/pelf1.jpg" alt="">
+            <img class="img-fluid rounded mb-3 mb-md-0" src="images/pelf3.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr>
+    </div>
+    <!-- /.container -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
