@@ -3,7 +3,8 @@
    added to the header over time 
    
    written by GuruVex 11/8/2018 */
-   
+
+/* this nave bar will be removed. */
 /* nav bar start */   
 #nav {
     width: 100%;
@@ -65,7 +66,9 @@
 
 .body_main_page {
     background-color: #000000;
-    color: #ffffff
+    color: #ffffff;
+    padding-top: 54px;
+	padding-top: 56px;
     }
 /* tabbing of items */        
 .tab1 {padding-left: 2em;}
@@ -84,6 +87,7 @@
 	font-family: 'Lora', serif;
 	color: #55e95c;
 }
+/* this table css mite be removed */
 table {
     	border-collapse: collapse;
     	border: 1px solid #8de6a0;
@@ -93,27 +97,32 @@ table {
     	padding-bottom: 10px;
     	padding-left: 30px;
 }
-.div1 {
-    	border: 1px solid #8de6a0;
-	border-radius: 5px;
-    	padding-top: 10px;
-    	padding-right: 300px;
-    	padding-bottom: 10px;
-    	padding-left: 30px;
-	margin: 0 auto; 
-	width: 130px;
-}
+
 
 /* dev tools page */
-.p_dev {font-family: 'Lora', serif;}
+.p_dev {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+}
+
 .mybanner_dev_tools {		
 font-family: 'Oswald', cursive;
-text-shadow: 4px 4px 4px #aaa;
 }
+
+.myheadder {
+    font-family: 'Lora', serif;
+    font-size: 30px;
+}
+
+/* end dev tools */
 
 .go_right {
     float: right;
 }
 .go_left {
     float: left;
+}
+
+.barcolor {
+    background-color: #e6db78;
 }

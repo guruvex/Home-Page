@@ -1,169 +1,203 @@
 <!DOCTYPE html>
-<html>
-		<head>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>QuickBasic projects</title>
 
-				<meta charset="utf-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-				<meta name="description" content="">
-				<meta name="author" content="">
-			
-				<title>
-						GuruVex Random Projects
-					</title>
-			
-				<!-- Bootstrap core CSS -->
-				<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-			
-				<!-- Custom styles for this template -->
-				<link href="guruvex.css" rel="stylesheet">
-				<link rel="stylesheet" type="text/css" href="guruvex.css">
-				<link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
-				<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
-			  </head>
-			
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-	<body class = "body_main_page">
-	
-		<!-- add nav bar -->
-		<ul id="nav">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="portfolio.html">Portfolio</a></li>
-                <li><a href="devtools.html">My Dev Tools</a></li>
-                <li><a href="quickbasic.html">QuickBasic</a></li>
-                <li><a href="android.html">Android</a></li>
-            </ul>
-	 <!-- Page Content -->
-	 <div class="container">
+    <!-- Custom styles for this template -->
+    <link href="guruvex.css" rel="stylesheet">
 
-		<!-- start here -->
-		<div class="clearfix"></div>
-		<h1 class="mybanner">Quick Basic Programming <img src="images/rocket.jpg"></h1>
-		<div class="clearfix"></div>
-		<p class="myparagraph">
+  </head>
+  <body class = "body_main_page">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home Page
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="portfolio.html">Portfolio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="training.html">Training</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="android.html">Android</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="quickbasic.html">QuickBasic</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="devtools.html">My Dev Tools</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+     
+	  <!-- about me on left side-->
+	  <div class="entry">
+		<div class="go_left">
+			<h3 class="mybanner">Quick Basic Programming<img src="images/rocket.jpg"></h3>
+		</div>
+		<div class="clearleft"></div>
+		<p class="myparagraph">	
 			This is a list of programs i built back on the 90's with quick basic 4.5 <br>
-			I have it here simply for reference if anyone wants to see what what could be done with quick basic.<br>
-			<br>
-			You can still run the programs using a DOS emulator like DosBox, or a boot-able Free Dos drive.<br>
-			The other option is QB64. It was built to be compatible with the old quick basic syntax.
+			I have it here simply for reference if anyone wants to see what what could be done with quick basic.
+			You can still run the programs using a DOS emulator like DosBox, or a boot-able Free Dos drive.
+			The other option is QB64. It was built to be compatible with the old quick basic syntax.  
 		</p>
-		<hr>
-		<div class="entry">
-			<img src="images/shooter1.jpg">
-			<img src="images/shooter.jpg">
-			<h3 class="mybanner">Shooter</h3>
-			<div class="clearleft"></div>
-			<a href="/code/shooter.bas" download="/code/shooter.bas"><button>Download the code</button></a>
-			<div class="clearleft"></div>		
-			<p class="myparagraph">
-				This was one of my first artificial intelligence programs. It has a<br>
-				player on the left and right of the screen. One of the players can<br>
-				be human or computer player, so you can play with a friend or solo. <br>
-				The center blocks move up and down and will block shoots. I added<br>
-				this to put some fun dynamic to the game. 
-			</p>
-			<div class="clearfix"></div>
-			<hr>
 		</div>
-		
-		<!-- 2nd program -->
-		<div class ="entry">
-			<img src="images/my3D.jpg">
-			<h3 class="mybanner">3D Maze</h3>
-			<div class="clearleft"></div>
-			<a href="/code/my3D.bas" download="/code/my3D.bas"><button>Download the code</button></a>
-			<div class="clearleft"></div>
-			<p class="myparagraph">
-				I built this program to push the limits of what i could do with QuickBasic.<br>
-				It was really challenging and due to only having a 486 computer it didn't run very fast. <br>
-				Some of the things I did differently was to use a read/data to load array tables,<br>
+		  <div class="clearfix"></div>
+		  <hr class="barcolor">
+
+      <!-- Project #14 -->
+      <div class="row">
+        <div class="col-md-4">
+          <h3 class="mybanner">Shooter</h3>
+          <p class="myparagraph">This was one of my first artificial intelligence programs. It has a
+				player on the left and right of the screen. One of the players can
+				be human or computer player, so you can play with a friend or solo.
+				The center blocks move up and down and will block shoots. I added
+				this to put some fun dynamic to the game.
+          </p>
+          <a class="btn btn-primary" href="/code/shooter.bas">Download the code</a>
+        </div>
+		<div class="col-md-8">
+            <div class="go_right">
+              <img class="img-fluid rounded mb-3 mb-md-0" src="images/shooter1.jpg" alt="">
+			  <img class="img-fluid rounded mb-3 mb-md-0" src="images/shooter.jpg" alt="">
+            </div>
+          </div>
+      </div>
+      <!-- /.row -->
+      <hr class="barcolor">
+      <!-- Project #13 -->
+      <div class="row">
+        <div class="col-md-8">
+          <h3 class="mybanner">3D Maze</h3>
+          <p class="myparagraph">I built this program to push the limits of what i could do with QuickBasic.
+				It was really challenging and due to only having a 486 computer it didn't run very fast.
+				Some of the things I did differently was to use a read/data to load array tables,
 				and sine/cosine for the math to draw the walls properly.
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-		
-		<!-- 3nd program -->
-		<div class="entry">
-			<img src="images/pelf1.jpg">
-			<img src="images/pelf3.jpg">
-			<h3 class="mybanner">Power elf</h3>
-			<div class="clearleft"></div>
-			<a href="/code/pelf.7z" download="/code/pelf.7z"><button>Download the code</button></a>
-			<div class="clearleft"></div>
-			<p class="myparagraph">
-				This program was months in the making. It has 2 players and was built around a race<br>
-				to the finish. It has many features such as hand to hand weapon, ranged weapon<br>
-				and bombs that can be placed. There are many types of keys and doors. Teleporters<br>
-				breakable and pushable walls and the graphics animate. When a player dies he is sent<br>
-				to a level specific waiting area until next round.<br>
-				There's also 2 types of artificial intelligence built in to the game. One fallows<br>
+          </p>
+          <a class="btn btn-primary" href="/code/my3D.bas">Download the code</a>
+        </div>
+        <div class="col-md-4">
+            <div class="go_right">
+              <img class="img-fluid rounded mb-3 mb-md-0" src="images/my3D.jpg" alt="">
+            </div>
+          </div>
+      </div>
+	  <!-- /.row -->
+	  <hr class="barcolor">
+      <!-- Project #13 -->
+      <div class="row">
+        <div class="col-md-4">
+          <h3 class="mybanner">Power elf</h3>
+          <p class="myparagraph">This program was months in the making. It has 2 players and was built around a race
+				to the finish. It has many features such as hand to hand weapon, ranged weapon
+				and bombs that can be placed. There are many types of keys and doors. Teleporters
+				breakable and pushable walls and the graphics animate. When a player dies he is sent
+				to a level specific waiting area until next round.
+				There's also 2 types of artificial intelligence built in to the game. One fallows
 				a path and the other will search the maze for the players.
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-		<!-- 4nd program -->
-		<div class="entry">
-			<h3 class="mybanner">Jropout</h3>
-			<div class="clearleft"></div>
-			<a href="/code/jropout.bas" download="/code/jropout.bas"><button>Download the code</button></a>
-			<div class="clearleft"></div>
-			<p class="myparagraph">
-				This was a simple game I built, the idea is the ship is dropping down and your trying to dodge the incoming stars.
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-		<!-- 5nd program -->
-		<div class="entry">
-			<h3 class="mybanner">Tunnel</h3>
-			<div class="clearleft"></div>
-			<a href="/code/jropout.bas" download="/code/jropout.bas"><button>Download the code</button></a>
-			<div class="clearleft"></div>
-			<p class="myparagraph">
-				I built this when I was experimenting with line drawing commands, it takes a line with
-				a with cycling colors and makes what looks like a tunnel with patterns on the walls.
-				It don't do much but it looks cool. 
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-		<!-- 6nd program -->
-		<div class="entry">
-			<h3 class="mybanner">Box Screen saver</h3>
-			<div class="clearleft"></div>
-			<a href="/code/box.bas" download="/code/box.bas"><button>Download the code</button></a>
-			<div class="clearleft"></div>
-			<p class="myparagraph">
-				This is like the tunnel program, experimenting with line drawing commands.
-				this one takes 4 box shapes and cycle the color and size giving a old
-				school screen saver effet. 
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-				<!-- 6nd program -->
-		<div class="entry">
-			<h3 class="mybanner">Trace</h3>
-			<div class="clearleft"></div>
-			<a href="/code/trace.bas" download="/code/trace.bas"><button>Download the code</button></a>
-			<div class="clearleft"></div>
-			<p class="myparagraph">
-				This was kind of like a game. But was more built to figure out a way to have a computer controlled player search a dynamic maze to find the player.
-				I call the maze dynamic because you can change it how ever you want and you don't have to change any code for the computer controlled player.
-				This was latter used in the power elf game I built.
-				<br>
-				The 2nd part of the screen is showing the pathing logic as the search runs for debugging
-			</p>
-			<div class="clearfix"></div>
-			<hr>
-		</div>
-	      <!-- /.container -->
-		</div>
-		<!-- Bootstrap core JavaScript -->
-		<script src="vendor/jquery/jquery.min.js"></script>
-		<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
-	  </body>
-	
-	</html>
+          </p>
+		  <a class="btn btn-primary" href="/code/pelf.7z">Download the code</a>
+        </div>
+        <div class="col-md-8">
+            <div class="go_right">
+              <img class="img-fluid rounded mb-3 mb-md-0" src="images/pelf1.jpg" alt="">
+			  <img class="img-fluid rounded mb-3 mb-md-0" src="images/pelf3.jpg" alt="">
+            </div>
+          </div>
+      </div>
+      <!-- /.row -->
+      <hr class="barcolor">
+      <!-- Project #12 -->
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="mybanner">Jropout</h3>
+          <p class="myparagraph">
+			  This was a simple game I built, the idea is the ship is dropping down and your trying to dodge the 
+			  incoming stars.
+          </p>
+          <a class="btn btn-primary" href="/code/jropout.bas">Download the code</a>
+        </div>
+		
+      </div>
+      <!-- /.row -->
+      <hr class="barcolor">
+      <!-- Project #11 -->
+      <div class="row">
+        <div class="col-md-5">
+          <h3 class="mybanner">Tunnel</h3>
+          <p class="myparagraph">
+			I built this when I was experimenting with line drawing commands, it takes a line with
+			a with cycling colors and makes what looks like a tunnel with patterns on the walls. It don't do 
+			much but it looks cool.
+          </p>
+          <a class="btn btn-primary" href="/code/tunnel.bas">Download the code</a>
+        </div>
+      </div>
+      <!-- /.row -->
+      <hr class="barcolor">
+      <!-- Project #10 -->
+      <div class="row">
+        <div class="col-md-8">
+          <h3 class="mybanner">Box Screen saver</h3>
+          <p class="myparagraph">
+			This is like the tunnel program, experimenting with line drawing commands.
+			this one takes 4 box shapes and cycle the color and size giving a old
+			school screen saver effet. 
+          </p>
+          <a class="btn btn-primary" href="/code/box.bas">Download the code</a>
+        </div>
+        
+      </div>
+      <!-- /.row -->
+      <hr class="barcolor">
+    
+      <!-- Project #8 -->
+      <div class="row">
+        <div class="col-md-8">
+          <h3 class="mybanner">Trace</h3>
+          <p class="myparagraph">
+			This was kind of like a game. But was more built to figure out a way to have a computer controlled player 
+			search a dynamic maze to find the player. I call the maze dynamic because you can change it how ever you 
+			want and you don't have to change any code for the computer controlled player. This was latter used in 
+			the power elf game I built.
+			<br>
+			The 2nd part of the screen is showing the pathing logic as the search runs for debugging
+          </p>
+          <a class="btn btn-primary" href="/code/trace.bas">Download the code</a>
+        </div>
+        
+      </div>
+      <!-- /.row -->
+      
+      <hr class="barcolor">
+    </div>
+    <!-- /.container -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
