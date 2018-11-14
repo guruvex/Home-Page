@@ -60,8 +60,9 @@
               <small>                
                 <p>
                 James Heath<br>
-                JamesHeath.work@gmail.com<br>
-                <a href="https://www.linkedin.com/in/james-heath-71a58665/" target="_blank">LinkedIn Profile</a>
+                <button class="no_button" id="copyBox" title="Copy me!" onclick="myFunction1('JamesHeath.work@gmail.com')">JamesHeath.work@gmail.com</button><br>
+                <a href="https://www.linkedin.com/in/james-heath-71a58665/" target="_blank">LinkedIn Profile</a><br>
+                
               </p>
             </small>
           </div>
@@ -358,5 +359,16 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript">
+      function myFunction1(str) {
+        const el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+      } 
+    </script>
   </body>
 </html>
